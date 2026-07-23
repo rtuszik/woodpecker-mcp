@@ -1,7 +1,7 @@
 #:schema https://www.schemastore.org/pyproject.json
 
 [project]
-name = "woodpecker-mcp"
+name = "woodpecker-ci-mcp"
 version = "0.1.0"
 description = "MCP server for Woodpecker CI"
 readme = "README.md"
@@ -17,6 +17,7 @@ dependencies = [
 Repository = "https://github.com/rtuszik/woodpecker-mcp"
 
 [project.scripts]
+woodpecker-ci-mcp = "woodpecker_mcp.__main__:main"
 woodpecker-mcp = "woodpecker_mcp.__main__:main"
 
 [dependency-groups]
@@ -86,6 +87,9 @@ quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 docstring-code-format = false
+
+[tool.uv.build-backend]
+module-name = "woodpecker_mcp"
 
 [tool.vulture]
 min_confidence = 80

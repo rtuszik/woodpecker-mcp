@@ -49,38 +49,34 @@ before reaching the client.
 docker run -p 8000:8000 \
   -e WOODPECKER_SERVER=https://ci.example.com \
   -e WOODPECKER_TOKEN=... \
-  woodpecker-mcp
+  ghcr.io/rtuszik/woodpecker-mcp:latest
 ```
 
 The MCP endpoint is `http://<host>:8000/mcp` (streamable HTTP).
 
-### Locally with uv (stdio)
+### uvx (stdio)
 
-With `WOODPECKER_MCP_TRANSPORT=stdio` the server speaks MCP over stdin/stdout,
-so a client can spawn it directly. From a checkout, register it with e.g.
-Claude Code:
+The package is published to PyPI as
+[`woodpecker-ci-mcp`](https://pypi.org/project/woodpecker-ci-mcp/). With
+`WOODPECKER_MCP_TRANSPORT=stdio` the server speaks MCP over stdin/stdout, so a
+client can spawn it directly. Register it with e.g. Claude Code:
 
 ```sh
 claude mcp add woodpecker \
   --env WOODPECKER_SERVER=https://ci.example.com \
   --env WOODPECKER_TOKEN=... \
   --env WOODPECKER_MCP_TRANSPORT=stdio \
-  -- uv run --project /path/to/woodpecker-mcp woodpecker-mcp
+  -- uvx woodpecker-ci-mcp
 ```
 
-or in a generic MCP client config (once published to PyPI, replace the
-`--from git+…` args with just `["woodpecker-mcp"]`):
+or in a generic MCP client config:
 
 ```json
 {
   "mcpServers": {
     "woodpecker": {
       "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/rtuszik/woodpecker-mcp",
-        "woodpecker-mcp"
-      ],
+      "args": ["woodpecker-ci-mcp"],
       "env": {
         "WOODPECKER_SERVER": "https://ci.example.com",
         "WOODPECKER_TOKEN": "...",
