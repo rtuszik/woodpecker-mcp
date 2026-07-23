@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://www.schemastore.org/pre-commit-config.json
+
+repos:
+    - repo: https://github.com/betterleaks/betterleaks
+      rev: v1.6.1
+      hooks:
+        - id: betterleaks
+
+    - repo: local
+      hooks:
+        - id: mise-check
+          name: mise-check
+          language: system
+          entry: mise check
+          pass_filenames: false

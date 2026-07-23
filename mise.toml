@@ -1,0 +1,21 @@
+[tools]
+prek = "latest"
+uv = "latest"
+
+[settings]
+lockfile = true
+
+[tasks.check]
+depends = ["format", "lint", "typecheck", "pytest"]
+
+[tasks.format]
+run = "uv run ruff format"
+
+[tasks.lint]
+run = "uv run ruff check --fix"
+
+[tasks.typecheck]
+run = "uv run ty check"
+
+[tasks.pytest]
+run = "uv run pytest"
