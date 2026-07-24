@@ -27,19 +27,34 @@ exposed.
 | Variable                   | Required | Description                                                                           |
 | -------------------------- | -------- | ------------------------------------------------------------------------------------- |
 | `WOODPECKER_SERVER`        | yes      | Base URL of the Woodpecker server, e.g. `https://ci.example.com` (`/api` is appended) |
-| `WOODPECKER_TOKEN`         | yes      | Personal access token used for upstream API calls                                     |
+| `WOODPECKER_TOKEN`         | see below | Personal access token used as a shared fallback for upstream API calls               |
 | `WOODPECKER_MCP_READ_ONLY` | no       | `true`/`1`/`yes`/`on` removes the five write tools entirely                           |
 | `WOODPECKER_MCP_TRANSPORT` | no       | `http` (default) or `stdio`                                                           |
 | `HOST`                     | no       | Bind address (http only), default `0.0.0.0`                                           |
 | `PORT`                     | no       | Bind port (http only), default `8000`                                                 |
 
-An MCP client may act as a different Woodpecker user by sending an
-`X-Woodpecker-Token` header; it overrides `WOODPECKER_TOKEN` for that request.
+### Multi-client authentication (http)
 
-The server performs no authentication of its own, deploy it on a trusted
-network. `token` fields in upstream responses (e.g. agent registration
-tokens, which Woodpecker returns in cleartext to admin PATs) are redacted
-before reaching the client.
+Each client authenticates as its own Woodpecker user by sending its personal
+access token as a standard bearer header with every request:
+
+```
+Authorization: Bearer <woodpecker-token>
+```
+
+The token is forwarded upstream for that request only; a shared
+`httpx.AsyncClient` reads the header per request, so clients never see each
+other's credentials. `WOODPECKER_TOKEN` is optional under http, if set, it is
+used as a fallback for requests that carry no bearer token of their own. A
+request with neither its own token nor a configured fallback is rejected.
+
+Under the **stdio** transport there are no per-request headers, so
+`WOODPECKER_TOKEN` is required and always used.
+
+The server performs no authentication of its own beyond forwarding the token,
+deploy it on a trusted network (e.g. behind TLS). `token` fields in upstream
+responses (e.g. agent registration tokens, which Woodpecker returns in
+cleartext to admin PATs) are redacted before reaching the client.
 
 ## Running
 
@@ -87,8 +102,8 @@ or in a generic MCP client config:
 }
 ```
 
-In stdio mode the per-request `X-Woodpecker-Token` override does not apply;
-the configured token is always used.
+In stdio mode there are no per-request headers, so the configured
+`WOODPECKER_TOKEN` is always used.
 
 ## Development
 

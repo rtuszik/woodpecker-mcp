@@ -46,6 +46,22 @@ def test_settings_read_stdio_transport_from_environment(monkeypatch):
     assert Settings.from_env().transport == "stdio"
 
 
+def test_settings_token_optional_for_http(monkeypatch):
+    monkeypatch.setenv("WOODPECKER_SERVER", "https://ci.example.com")
+    monkeypatch.delenv("WOODPECKER_TOKEN", raising=False)
+
+    assert Settings.from_env().token is None
+
+
+def test_settings_require_token_for_stdio(monkeypatch):
+    monkeypatch.setenv("WOODPECKER_SERVER", "https://ci.example.com")
+    monkeypatch.setenv("WOODPECKER_MCP_TRANSPORT", "stdio")
+    monkeypatch.delenv("WOODPECKER_TOKEN", raising=False)
+
+    with pytest.raises(ValueError, match="WOODPECKER_TOKEN is required"):
+        Settings.from_env()
+
+
 def test_settings_reject_unknown_transport(monkeypatch):
     monkeypatch.setenv("WOODPECKER_SERVER", "https://ci.example.com")
     monkeypatch.setenv("WOODPECKER_TOKEN", "secret")
