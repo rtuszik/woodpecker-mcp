@@ -16,7 +16,9 @@ _TRANSPORTS = {"http", "stdio"}
 @dataclass(frozen=True)
 class Settings:
     server_url: str
-    token: str
+    # Optional under http, where each client sends its own bearer token; used
+    # as a shared fallback. Required under stdio, which has no request headers.
+    token: str | None = None
     read_only: bool = False
     transport: str = "http"
     host: str = "0.0.0.0"
@@ -31,9 +33,13 @@ class Settings:
                 f"{sorted(_TRANSPORTS)}, got {transport!r}"
             )
             raise ValueError(msg)
+        token = os.environ.get("WOODPECKER_TOKEN")
+        if transport == "stdio" and not token:
+            msg = "WOODPECKER_TOKEN is required for the stdio transport"
+            raise ValueError(msg)
         return cls(
             server_url=os.environ["WOODPECKER_SERVER"],
-            token=os.environ["WOODPECKER_TOKEN"],
+            token=token,
             read_only=os.environ.get("WOODPECKER_MCP_READ_ONLY", "").lower() in _TRUTHY,
             transport=transport,
             host=os.environ.get("HOST", cls.host),
