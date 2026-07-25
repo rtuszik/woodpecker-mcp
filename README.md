@@ -60,14 +60,54 @@ cleartext to admin PATs) are redacted before reaching the client.
 
 ### Docker (streamable HTTP)
 
+Run the server once; each client authenticates per request with its own token,
+so no shared `WOODPECKER_TOKEN` is required:
+
 ```sh
 docker run -p 8000:8000 \
   -e WOODPECKER_SERVER=https://ci.example.com \
-  -e WOODPECKER_TOKEN=... \
   ghcr.io/rtuszik/woodpecker-mcp:latest
 ```
 
+Add `-e WOODPECKER_TOKEN=...` only if you want a shared fallback token for
+clients that connect without one of their own.
+
 The MCP endpoint is `http://<host>:8000/mcp` (streamable HTTP).
+
+### Connecting a client (remote HTTP)
+
+Point the client at wherever the server is deployed and send your own
+Woodpecker personal access token as a bearer header. Replace the URL below with
+your server's endpoint. In Claude Code:
+
+```sh
+claude mcp add --transport http woodpecker https://your-mcp-host/mcp \
+  --header "Authorization: Bearer <your-woodpecker-token>"
+```
+
+or in a generic MCP client config:
+
+```json
+{
+  "mcpServers": {
+    "woodpecker": {
+      "type": "http",
+      "url": "https://your-mcp-host/mcp",
+      "headers": {
+        "Authorization": "Bearer <your-woodpecker-token>"
+      }
+    }
+  }
+}
+```
+
+Every request carries the header, so the server acts as your Woodpecker user
+for that request only. Different clients can hit the same server with different
+tokens.
+
+A plain `http://` URL works too (e.g. on a trusted LAN without TLS), though
+some clients refuse to send an `Authorization` header over non-HTTPS; prefer
+terminating TLS at a reverse proxy for anything exposed beyond localhost.
 
 ### uvx (stdio)
 
