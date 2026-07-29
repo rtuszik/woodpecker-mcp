@@ -1,6 +1,14 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "local>rtuszik/renovate-config"
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["local>rtuszik/renovate-config"],
+    "customManagers": [
+        {
+            "customType": "regex",
+            "description": "Update the PYTHON_VERSION build arg shared by both Dockerfile stages",
+            "managerFilePatterns": ["/(^|/|\\.)Dockerfile$/"],
+            "matchStrings": [
+                "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\sARG PYTHON_VERSION=(?<currentValue>.+?)\\s"
+            ]
+        }
+    ]
 }
