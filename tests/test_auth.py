@@ -1,4 +1,4 @@
-import httpx
+import httpx2
 import pytest
 from fastmcp import Client
 from fastmcp.exceptions import ToolError
@@ -6,12 +6,12 @@ from fastmcp.exceptions import ToolError
 from woodpecker_mcp.server import Settings, create_server
 
 
-def capture_transport(captured: list[httpx.Request]) -> httpx.MockTransport:
-    def handler(request: httpx.Request) -> httpx.Response:
+def capture_transport(captured: list[httpx2.Request]) -> httpx2.MockTransport:
+    def handler(request: httpx2.Request) -> httpx2.Response:
         captured.append(request)
-        return httpx.Response(200, json={"id": 1})
+        return httpx2.Response(200, json={"id": 1})
 
-    return httpx.MockTransport(handler)
+    return httpx2.MockTransport(handler)
 
 
 def settings(*, token: str | None = "env-token") -> Settings:
@@ -26,7 +26,7 @@ def send_headers(monkeypatch, headers: dict[str, str]) -> None:
 
 
 async def test_tool_calls_fall_back_to_the_env_token():
-    captured: list[httpx.Request] = []
+    captured: list[httpx2.Request] = []
     server = create_server(settings(), transport=capture_transport(captured))
 
     async with Client(server) as client:
@@ -39,7 +39,7 @@ async def test_tool_calls_fall_back_to_the_env_token():
 
 async def test_incoming_bearer_token_overrides_the_env_token(monkeypatch):
     send_headers(monkeypatch, {"authorization": "Bearer caller-token"})
-    captured: list[httpx.Request] = []
+    captured: list[httpx2.Request] = []
     server = create_server(settings(), transport=capture_transport(captured))
 
     async with Client(server) as client:
@@ -51,7 +51,7 @@ async def test_incoming_bearer_token_overrides_the_env_token(monkeypatch):
 
 async def test_bearer_scheme_is_case_insensitive(monkeypatch):
     send_headers(monkeypatch, {"authorization": "bearer caller-token"})
-    captured: list[httpx.Request] = []
+    captured: list[httpx2.Request] = []
     server = create_server(settings(token=None), transport=capture_transport(captured))
 
     async with Client(server) as client:
@@ -63,7 +63,7 @@ async def test_bearer_scheme_is_case_insensitive(monkeypatch):
 
 async def test_request_without_a_token_is_rejected(monkeypatch):
     send_headers(monkeypatch, {})
-    captured: list[httpx.Request] = []
+    captured: list[httpx2.Request] = []
     server = create_server(settings(token=None), transport=capture_transport(captured))
 
     async with Client(server) as client:
@@ -75,7 +75,7 @@ async def test_request_without_a_token_is_rejected(monkeypatch):
 
 async def test_non_bearer_authorization_is_ignored(monkeypatch):
     send_headers(monkeypatch, {"authorization": "Basic Zm9vOmJhcg=="})
-    captured: list[httpx.Request] = []
+    captured: list[httpx2.Request] = []
     server = create_server(settings(), transport=capture_transport(captured))
 
     async with Client(server) as client:
