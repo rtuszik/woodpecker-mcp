@@ -1,7 +1,8 @@
 # renovate: datasource=docker depName=python versioning=docker
 ARG PYTHON_VERSION=3.14
 
-FROM ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-bookworm-slim AS builder
+FROM ghcr.io/astral-sh/uv:python${PYTHON_VERSION}-alpine3.23 AS builder
+
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
 RUN --mount=type=cache,target=/root/.cache/uv \
@@ -13,8 +14,8 @@ COPY src ./src
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-editable
 
-FROM python:${PYTHON_VERSION}-slim
-RUN useradd --create-home --uid 1000 app
+FROM python:${PYTHON_VERSION}-alpine3.23
+RUN adduser -D -u 1000 app
 COPY --from=builder --chown=app:app /app/.venv /app/.venv
 USER app
 ENV PATH="/app/.venv/bin:$PATH"
