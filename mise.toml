@@ -19,3 +19,12 @@ run = "uv run ty check"
 
 [tasks.pytest]
 run = "uv run pytest"
+
+[tasks.build]
+description = "Build and run the container locally against .env"
+run = [
+  "podman build -t localhost/woodpecker-mcp:dhi .",
+  '''podman run --rm -it -p 8000:8000 --env-file .env \
+  --read-only --cap-drop ALL --security-opt no-new-privileges \
+  localhost/woodpecker-mcp:dhi''',
+]
