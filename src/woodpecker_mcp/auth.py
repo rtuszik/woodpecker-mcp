@@ -9,7 +9,7 @@ token available under the stdio transport, which has no per-request headers).
 
 from collections.abc import Generator
 
-import httpx
+import httpx2
 from fastmcp.server.dependencies import get_http_headers
 
 # fastmcp strips `authorization` from get_http_headers() by default; opt back
@@ -28,13 +28,13 @@ class MissingTokenError(RuntimeError):
         )
 
 
-class WoodpeckerAuth(httpx.Auth):
+class WoodpeckerAuth(httpx2.Auth):
     def __init__(self, default_token: str | None = None) -> None:
         self._default_token = default_token
 
     def auth_flow(
-        self, request: httpx.Request
-    ) -> Generator[httpx.Request, httpx.Response]:
+        self, request: httpx2.Request
+    ) -> Generator[httpx2.Request, httpx2.Response]:
         token = _caller_token() or self._default_token
         if not token:
             raise MissingTokenError
