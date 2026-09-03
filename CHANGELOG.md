@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.4.0](https://github.com/rtuszik/woodpecker-mcp/compare/6387eb9aa84c1fd536a9d6f6bbde414438d4c74e..v0.4.0) - 2026-09-03
+#### Features
+- add automated release pipeline and changelog - ([75268d6](https://github.com/rtuszik/woodpecker-mcp/commit/75268d6e3f49e03b59120462a5b15392f668e441)) - Robin Tuszik
+#### Documentation
+- fix changelog formatting - ([60557de](https://github.com/rtuszik/woodpecker-mcp/commit/60557deb0826841de68ba3b8a3fea6662ce8d644)) - Robin Tuszik
+#### Continuous Integration
+- (**ci**) add zizmor job to CI workflow - ([147952a](https://github.com/rtuszik/woodpecker-mcp/commit/147952abb000e57c9f1f6a8fecf2fba4103f4dec)) - Robin Tuszik
+- use atomic push for release workflow - ([1ae8918](https://github.com/rtuszik/woodpecker-mcp/commit/1ae89186f980901e15eaf71788fab5e16ffd8cbe)) - Robin Tuszik
+#### Miscellaneous Chores
+- (**deps**) update zizmorcore/zizmor-action action to v0.6.3 (#27) - ([2a59b6a](https://github.com/rtuszik/woodpecker-mcp/commit/2a59b6a0e5aef7113e78f0d4aa1c19d60a30aa43)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update pre-commit hook betterleaks/betterleaks to v1.8.1 - ([1a4e1a6](https://github.com/rtuszik/woodpecker-mcp/commit/1a4e1a6cbccade2f61656025f4c53e933cc2abff)) - koalabot-rt[bot]
+- (**deps**) update ghcr.io/astral-sh/uv docker tag to v0.12.7 - ([a46d1a0](https://github.com/rtuszik/woodpecker-mcp/commit/a46d1a02aacfdfa14b2772b9ac486f1d8fac1266)) - koalabot-rt[bot]
+- (**deps**) update astral-sh/setup-uv action to v10 - ([6c93f98](https://github.com/rtuszik/woodpecker-mcp/commit/6c93f985df3180f4d4db709ac950096c22757af8)) - koalabot-rt[bot]
+- (**deps**) update pre-commit hook betterleaks/betterleaks to v1.7.4 - ([dec9fce](https://github.com/rtuszik/woodpecker-mcp/commit/dec9fcea4961df2dc2ec7fd6ffe26888facbcbcd)) - koalabot-rt[bot]
+- (**deps**) update ghcr.io/astral-sh/uv docker tag to v0.12.3 - ([2b8c4fc](https://github.com/rtuszik/woodpecker-mcp/commit/2b8c4fceced83a81119d8800849fca42c8f223c9)) - koalabot-rt[bot]
+- (**deps**) update pre-commit hook betterleaks/betterleaks to v1.7.3 (#17) - ([ee9ec35](https://github.com/rtuszik/woodpecker-mcp/commit/ee9ec359ebae5501ed18a72081d8a70be011222a)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update docker/login-action action to v4.6.0 - ([6387eb9](https://github.com/rtuszik/woodpecker-mcp/commit/6387eb9aa84c1fd536a9d6f6bbde414438d4c74e)) - koalabot-rt[bot]
+
+- - -
+
 
 ## [v0.3.0](https://github.com/rtuszik/woodpecker-mcp/releases/tag/v0.3.0) - 2026-08-01
 
