@@ -63,7 +63,7 @@ jobs:
               if: steps.plan.outputs.released == 'true'
               env:
                 TAG: ${{ steps.plan.outputs.tag }}
-              run: git push origin HEAD "refs/tags/$TAG"
+              run: git push --atomic origin HEAD "refs/tags/$TAG"
 
             - name: Generate release notes
               if: steps.plan.outputs.released == 'true'
