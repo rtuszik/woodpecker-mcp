@@ -8,7 +8,7 @@ them. Redaction happens at the HTTP transport so every tool is covered.
 import json
 from typing import Any
 
-import httpx
+import httpx2
 
 REDACTED = "[REDACTED]"
 _SENSITIVE_KEYS = {"token"}
@@ -27,11 +27,11 @@ def redact(data: Any) -> Any:
     return data
 
 
-class RedactingTransport(httpx.AsyncBaseTransport):
-    def __init__(self, inner: httpx.AsyncBaseTransport) -> None:
+class RedactingTransport(httpx2.AsyncBaseTransport):
+    def __init__(self, inner: httpx2.AsyncBaseTransport) -> None:
         self._inner = inner
 
-    async def handle_async_request(self, request: httpx.Request) -> httpx.Response:
+    async def handle_async_request(self, request: httpx2.Request) -> httpx2.Response:
         response = await self._inner.handle_async_request(request)
         if not response.headers.get("content-type", "").startswith("application/json"):
             return response
@@ -43,7 +43,7 @@ class RedactingTransport(httpx.AsyncBaseTransport):
         redacted = redact(data)
         if redacted == data:
             return response
-        return httpx.Response(
+        return httpx2.Response(
             response.status_code,
             headers={"content-type": "application/json"},
             content=json.dumps(redacted).encode(),
