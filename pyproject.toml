@@ -7,8 +7,8 @@ description = "MCP server for Woodpecker CI"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-  "fastmcp>=3.4.4",
-  "httpx>=0.28.1",
+  "fastmcp==4.0.0b1",
+  "httpx2>=2.9.1",
   "pydantic>=2.13.4",
   "pyyaml>=6.0.3",
 ]
@@ -87,6 +87,11 @@ quote-style = "double"
 indent-style = "space"
 line-ending = "auto"
 docstring-code-format = false
+
+[tool.uv]
+# fastmcp 4 is a prerelease; uv will not pick prerelease versions for the
+# transitive fastmcp-slim pin unless it is constrained explicitly.
+constraint-dependencies = ["fastmcp-slim==4.0.0b1"]
 
 [tool.uv.build-backend]
 module-name = "woodpecker_mcp"

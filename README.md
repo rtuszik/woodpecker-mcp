@@ -43,7 +43,7 @@ Authorization: Bearer <woodpecker-token>
 ```
 
 The token is forwarded upstream for that request only; a shared
-`httpx.AsyncClient` reads the header per request, so clients never see each
+`httpx2.AsyncClient` reads the header per request, so clients never see each
 other's credentials. `WOODPECKER_TOKEN` is optional under http, if set, it is
 used as a fallback for requests that carry no bearer token of their own. A
 request with neither its own token nor a configured fallback is rejected.

@@ -8,12 +8,12 @@ only the tail.
 import base64
 from typing import Annotated
 
-import httpx
+import httpx2
 from fastmcp import FastMCP
 from pydantic import Field
 
 
-def register_log_tool(mcp: FastMCP, client: httpx.AsyncClient) -> None:
+def register_log_tool(mcp: FastMCP, client: httpx2.AsyncClient) -> None:
     @mcp.tool
     async def get_step_logs(
         repo_id: int,
