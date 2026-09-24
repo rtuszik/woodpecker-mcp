@@ -27,4 +27,14 @@ jobs:
                 context: .
                 platforms: linux/amd64
                 push: false
+                load: true
+                tags: woodpecker-mcp:ci
                 cache-from: type=gha
+            - name: Scan image with grype
+              uses: anchore/scan-action@e1165082ffb1fe366ebaf02d8526e7c4989ea9d2 # v7.4.0
+              with:
+                image: woodpecker-mcp:ci
+                output-format: table
+                severity-cutoff: high
+                only-fixed: true
+                cache-db: true
