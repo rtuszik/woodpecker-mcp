@@ -1,7 +1,7 @@
 import os
 from dataclasses import dataclass
 
-import httpx
+import httpx2
 from fastmcp import FastMCP
 
 from woodpecker_mcp.auth import WoodpeckerAuth
@@ -48,12 +48,12 @@ class Settings:
 
 
 def create_server(
-    settings: Settings, transport: httpx.AsyncBaseTransport | None = None
+    settings: Settings, transport: httpx2.AsyncBaseTransport | None = None
 ) -> FastMCP:
-    client = httpx.AsyncClient(
+    client = httpx2.AsyncClient(
         base_url=settings.server_url.rstrip("/") + "/api",
         auth=WoodpeckerAuth(settings.token),
-        transport=RedactingTransport(transport or httpx.AsyncHTTPTransport()),
+        transport=RedactingTransport(transport or httpx2.AsyncHTTPTransport()),
     )
     spec = prepare_spec(load_spec(), read_only=settings.read_only)
     mcp = FastMCP.from_openapi(

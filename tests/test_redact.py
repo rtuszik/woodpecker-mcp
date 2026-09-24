@@ -1,4 +1,4 @@
-import httpx
+import httpx2
 from fastmcp import Client
 
 from woodpecker_mcp.redact import REDACTED, redact
@@ -28,12 +28,12 @@ def test_redact_leaves_non_string_token_values_alone():
 
 
 async def test_agent_tools_never_return_the_registration_token():
-    def handler(_request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json=[AGENT])
+    def handler(_request: httpx2.Request) -> httpx2.Response:
+        return httpx2.Response(200, json=[AGENT])
 
     server = create_server(
         Settings(server_url="https://ci.example.com", token="env-token"),
-        transport=httpx.MockTransport(handler),
+        transport=httpx2.MockTransport(handler),
     )
 
     async with Client(server) as client:
