@@ -81,42 +81,42 @@ url_api = "https://api.github.com/repos/j178/prek/releases/assets/479038029"
 provenance = "github-attestations"
 
 [[tools.python]]
-version = "3.13.15"
+version = "3.13.16"
 backend = "core:python"
 
 [tools.python."platforms.linux-arm64"]
-checksum = "sha256:01ce0ce9189feaead3298abf10d4efe998c55a489b3d5d38ca4f83dda7e7977e"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.13.15+20260901-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"
+checksum = "sha256:f94c8f69f3e68b026b916b3aa32b9b3bfff63fd7c95b2affa8272b1601d668fa"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-aarch64-unknown-linux-gnu-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.linux-arm64-musl"]
-checksum = "sha256:40b7d31b0f50d9f500821b44ac8c0f253d94839b82cd07ed1c7e240787271bb2"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.13.15+20260901-aarch64-unknown-linux-musl-install_only_stripped.tar.gz"
+checksum = "sha256:6952e49f84fa720d61de783f7298410cbb98227ee9a0750340ec7385ae71420a"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-aarch64-unknown-linux-musl-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.linux-x64"]
-checksum = "sha256:8a689a077337bea6d1c4bc0b7df1d52fcaa28f5f67e50df8bf417c1e3f9d8874"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.13.15+20260901-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
+checksum = "sha256:ffcb50e716789d1a6e1db5e745d4d194ac8ed9b015ccf5eabcaccb179a25e4a8"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.linux-x64-musl"]
-checksum = "sha256:6d26dd7e3adaf613565cc703e0096774154d761c65523d373e6a36bc478dd4d5"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.13.15+20260901-x86_64-unknown-linux-musl-install_only_stripped.tar.gz"
+checksum = "sha256:31b1f560c68313c00bab4faa2452bc0a87e3e9f9ddf16b94d2265bd9d99afc2e"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-unknown-linux-musl-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.macos-arm64"]
-checksum = "sha256:d3904bd6a072246e07aa0bdadee9a14e80521e42a943c0848059feb16a2816dc"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.13.15+20260901-aarch64-apple-darwin-install_only_stripped.tar.gz"
+checksum = "sha256:d00669acb53c1b014f1fcf5eaea740d8e45c3aff4b1e0244dc0f8697fb211a82"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-aarch64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.macos-x64"]
-checksum = "sha256:f712a9143c8a5d248438ec7921a0b48d548bca4f1337d33c690d28c2d0504137"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.13.15+20260901-x86_64-apple-darwin-install_only_stripped.tar.gz"
+checksum = "sha256:a88bef59d9dd61ba4210772cce57a4b4cb963aa745ab956f7cc79ba60f9e2523"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.windows-x64"]
-checksum = "sha256:63d263ab0162f34a241a56dc5b283c22d6e131f5516117e6a921350c69ba7d4f"
-url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260901/cpython-3.13.15+20260901-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
+checksum = "sha256:c402eb9a35aba90de319bbc87d23e6d887eca1551a05cfa80775f92dcf3ebc08"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [[tools.uv]]
