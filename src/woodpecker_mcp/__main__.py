@@ -7,7 +7,12 @@ def main() -> None:
     if settings.transport == "stdio":
         server.run(transport="stdio")
     else:
-        server.run(transport="http", host=settings.host, port=settings.port)
+        server.run(
+            transport="http",
+            host=settings.host,
+            port=settings.port,
+            stateless_http=True,
+        )
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import asyncio
 import base64
+import json
 import socket
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -40,7 +41,9 @@ async def serve(
     )
     sock = socket.create_server(("127.0.0.1", 0))
     port = sock.getsockname()[1]
-    server = uvicorn.Server(uvicorn.Config(mcp.http_app(), log_level="error"))
+    server = uvicorn.Server(
+        uvicorn.Config(mcp.http_app(stateless_http=True), log_level="error")
+    )
     # Listening socket queues connections until uvicorn accepts; no startup poll.
     task = asyncio.create_task(server.serve(sockets=[sock]))
     try:
@@ -124,4 +127,48 @@ async def test_log_tool_forwards_the_caller_token(mode):
         )
 
     assert result.data == "build ok"
+    assert bearer(captured) == ["Bearer alice-token"]
+
+
+def rpc(method: str, params: dict, request_id: int) -> dict:
+    return {"jsonrpc": "2.0", "id": request_id, "method": method, "params": params}
+
+
+def sse_result(response: httpx2.Response) -> dict:
+    data = next(
+        line.removeprefix("data:")
+        for line in response.text.splitlines()
+        if line.startswith("data:")
+    )
+    return json.loads(data)["result"]
+
+
+async def test_legacy_client_needs_no_session_affinity_across_replicas():
+    captured: list[httpx2.Request] = []
+    headers = {
+        "Accept": "application/json, text/event-stream",
+        "Authorization": "Bearer alice-token",
+        "MCP-Protocol-Version": LEGACY,
+    }
+    init = rpc(
+        "initialize",
+        {
+            "protocolVersion": LEGACY,
+            "capabilities": {},
+            "clientInfo": {"name": "test", "version": "1"},
+        },
+        1,
+    )
+    call = rpc("tools/call", {"name": "get_current_user", "arguments": {}}, 2)
+
+    async with (
+        serve(captured) as replica_a,
+        serve(captured) as replica_b,
+        httpx2.AsyncClient(headers=headers) as http,
+    ):
+        initialized = await http.post(replica_a, json=init)
+        result = await http.post(replica_b, json=call)
+
+    assert "mcp-session-id" not in initialized.headers
+    assert sse_result(result)["isError"] is False
     assert bearer(captured) == ["Bearer alice-token"]
