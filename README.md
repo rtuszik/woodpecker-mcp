@@ -38,7 +38,7 @@ exposed.
 Each client authenticates as its own Woodpecker user by sending its personal
 access token as a standard bearer header with every request:
 
-```
+```text
 Authorization: Bearer <woodpecker-token>
 ```
 
@@ -73,6 +73,11 @@ Add `-e WOODPECKER_TOKEN=...` only if you want a shared fallback token for
 clients that connect without one of their own.
 
 The MCP endpoint is `http://<host>:8000/mcp` (streamable HTTP).
+
+The server keeps no session state, so any number of replicas can run behind
+an ordinary load balancer without session affinity. Clients on the
+`2026-07-28` protocol are sessionless by design; older clients are served in
+stateless mode, without an `Mcp-Session-Id` or a standalone SSE stream.
 
 ### Connecting a client (remote HTTP)
 

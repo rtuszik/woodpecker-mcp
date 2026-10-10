@@ -13,7 +13,14 @@ def test_main_runs_http_server_from_env(monkeypatch):
 
     main()
 
-    assert runs == [{"transport": "http", "host": "127.0.0.1", "port": 9000}]
+    assert runs == [
+        {
+            "transport": "http",
+            "host": "127.0.0.1",
+            "port": 9000,
+            "stateless_http": True,
+        }
+    ]
 
 
 def test_main_runs_stdio_server_from_env(monkeypatch):
