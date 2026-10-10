@@ -1,6 +1,9 @@
 ---
 # yaml-language-server: $schema=https://www.schemastore.org/pre-commit-config.json
 
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+
 repos:
     - repo: https://github.com/betterleaks/betterleaks
       rev: v1.9.0
@@ -14,3 +17,8 @@ repos:
           language: system
           entry: mise check
           pass_filenames: false
+        - id: cog-verify
+          name: cog-verify
+          language: system
+          entry: cog verify --file
+          stages: [commit-msg]

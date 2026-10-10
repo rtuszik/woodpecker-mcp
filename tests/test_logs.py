@@ -1,7 +1,7 @@
 import base64
 import json
 
-import httpx
+import httpx2
 from fastmcp import Client
 
 from woodpecker_mcp.server import Settings, create_server
@@ -18,22 +18,22 @@ def log_entry(line: int, text: str) -> dict:
     }
 
 
-def server_returning(entries: list[dict] | None, captured: list[httpx.Request]):
-    def handler(request: httpx.Request) -> httpx.Response:
+def server_returning(entries: list[dict] | None, captured: list[httpx2.Request]):
+    def handler(request: httpx2.Request) -> httpx2.Response:
         captured.append(request)
-        # httpx treats json=None as "no body"; the real API sends a literal null.
-        return httpx.Response(
+        # httpx2 treats json=None as "no body"; the real API sends a literal null.
+        return httpx2.Response(
             200,
             content=json.dumps(entries),
             headers={"content-type": "application/json"},
         )
 
     settings = Settings(server_url="https://ci.example.com", token="env-token")
-    return create_server(settings, transport=httpx.MockTransport(handler))
+    return create_server(settings, transport=httpx2.MockTransport(handler))
 
 
 async def test_get_step_logs_returns_decoded_plain_text():
-    captured: list[httpx.Request] = []
+    captured: list[httpx2.Request] = []
     entries = [log_entry(1, "cloning repo"), log_entry(2, "build failed: exit 1")]
     server = server_returning(entries, captured)
 
