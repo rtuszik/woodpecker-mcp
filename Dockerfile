@@ -1,5 +1,5 @@
 # renovate: datasource=docker depName=ghcr.io/astral-sh/uv versioning=docker
-ARG UV_VERSION=0.13.0
+ARG UV_VERSION=0.13.1
 # renovate: datasource=docker depName=dhi.io/python versioning=docker
 ARG PYTHON_VERSION=3.14
 
