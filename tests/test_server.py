@@ -1,3 +1,5 @@
+from importlib.metadata import version
+
 import httpx2
 import pytest
 from fastmcp import Client
@@ -109,3 +111,11 @@ async def test_read_only_server_has_no_write_tools():
         "get_step_logs"
     }
     assert {t.name for t in tools} == expected
+
+
+async def test_server_reports_the_package_version():
+    server = create_server(settings())
+
+    async with Client(server) as client:
+        assert client.server_info is not None
+        assert client.server_info.version == version("woodpecker-ci-mcp")
