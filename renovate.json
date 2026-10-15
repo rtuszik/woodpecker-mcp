@@ -9,6 +9,14 @@
             "matchStrings": [
                 "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>.+?)(?: versioning=(?<versioning>[a-z-]+?))?\\sARG [A-Z_]+=(?<currentValue>.+?)\\s"
             ]
+        },
+        {
+            "customType": "regex",
+            "description": "Update the MCP Inspector version pinned in the HTTP tests",
+            "managerFilePatterns": ["/^tests/test_http\\.py$/"],
+            "matchStrings": [
+                "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>\\S+)\\s+[A-Z_]+ = \"(?<currentValue>[^\"]+)\""
+            ]
         }
     ]
 }

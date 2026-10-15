@@ -1,9 +1,13 @@
 import asyncio
 import base64
 import json
+import os
+import shutil
 import socket
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
+from importlib.metadata import version
 
 import httpx2
 import pytest
@@ -14,10 +18,20 @@ from fastmcp.exceptions import ToolError
 from sse_starlette.sse import AppStatus
 
 from woodpecker_mcp.server import Settings, create_server
+from woodpecker_mcp.spec import TOOLS
 
 MODERN = "2026-07-28"
 LEGACY = "2025-11-25"
 MODES = pytest.mark.parametrize("mode", ["auto", "legacy"])
+ERAS = pytest.mark.parametrize("era", ["legacy", "modern"])
+# renovate: datasource=npm depName=@modelcontextprotocol/inspector
+INSPECTOR_VERSION = "2.11.0"
+INSPECTOR = ("bunx", f"@modelcontextprotocol/inspector@{INSPECTOR_VERSION}", "--cli")
+# Skip locally without the tooling; CI must run these, so never skip there.
+needs_inspector = pytest.mark.skipif(
+    not (shutil.which("bunx") and shutil.which("node")) and "CI" not in os.environ,
+    reason="MCP Inspector needs bun and node >= 22.19",
+)
 
 
 def upstream(captured: list[httpx2.Request]) -> httpx2.MockTransport:
@@ -172,3 +186,95 @@ async def test_legacy_client_needs_no_session_affinity_across_replicas():
     assert "mcp-session-id" not in initialized.headers
     assert sse_result(result)["isError"] is False
     assert bearer(captured) == ["Bearer alice-token"]
+
+
+@dataclass(frozen=True)
+class InspectorRun:
+    exit_code: int
+    output: dict
+
+
+async def inspect(url: str, era: str, *args: str) -> InspectorRun:
+    process = await asyncio.create_subprocess_exec(
+        *INSPECTOR,
+        url,
+        "--transport",
+        "http",
+        "--protocol-era",
+        era,
+        "--format",
+        "json",
+        *args,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+    stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=120)
+    assert process.returncode is not None
+    # Non-zero exits put a one-line JSON error envelope last on stderr.
+    body = stdout if process.returncode == 0 else stderr.splitlines()[-1]
+    return InspectorRun(process.returncode, json.loads(body))
+
+
+@needs_inspector
+@pytest.mark.parametrize(("era", "protocol"), [("legacy", LEGACY), ("modern", MODERN)])
+async def test_inspector_negotiates_the_era_and_sees_the_package_version(era, protocol):
+    async with serve([]) as url:
+        run = await inspect(url, era, "--method", "initialize")
+
+    assert run.exit_code == 0
+    assert run.output["result"]["protocolVersion"] == protocol
+    assert run.output["result"]["serverInfo"]["version"] == version("woodpecker-ci-mcp")
+
+
+@needs_inspector
+@ERAS
+async def test_inspector_lists_the_curated_tools_with_portable_schemas(era):
+    async with serve([]) as url:
+        run = await inspect(url, era, "--method", "tools/list", "--strict")
+
+    assert run.exit_code == 0
+    expected = {tool.name for tool in TOOLS.values()} | {"get_step_logs"}
+    assert {tool["name"] for tool in run.output["result"]["tools"]} == expected
+
+
+@needs_inspector
+@ERAS
+async def test_inspector_tool_call_forwards_the_caller_token(era):
+    captured: list[httpx2.Request] = []
+
+    async with serve(captured, token="env-token") as url:
+        run = await inspect(
+            url,
+            era,
+            "--header",
+            "Authorization: Bearer alice-token",
+            "--method",
+            "tools/call",
+            "--tool-name",
+            "get_step_logs",
+            "--tool-arg",
+            "repo_id=3",
+            "--tool-arg",
+            "pipeline_number=42",
+            "--tool-arg",
+            "step_id=7",
+        )
+
+    assert run.exit_code == 0
+    assert run.output["result"]["structuredContent"] == {"result": "build ok"}
+    assert bearer(captured) == ["Bearer alice-token"]
+
+
+@needs_inspector
+@ERAS
+async def test_inspector_tool_call_without_a_token_is_a_tool_error(era):
+    captured: list[httpx2.Request] = []
+
+    async with serve(captured) as url:
+        run = await inspect(
+            url, era, "--method", "tools/call", "--tool-name", "get_current_user"
+        )
+
+    assert run.exit_code == 5
+    assert run.output["error"]["code"] == "tool_is_error"
+    assert captured == []

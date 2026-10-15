@@ -1,5 +1,6 @@
 import os
 from dataclasses import dataclass
+from importlib.metadata import version
 
 import httpx2
 from fastmcp import FastMCP
@@ -60,6 +61,7 @@ def create_server(
         openapi_spec=spec,
         client=client,
         name="Woodpecker CI",
+        version=version("woodpecker-ci-mcp"),
     )
     register_log_tool(mcp, client)
     return mcp
