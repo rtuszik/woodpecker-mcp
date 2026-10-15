@@ -1,4 +1,6 @@
-import httpx
+from importlib.metadata import version
+
+import httpx2
 import pytest
 from fastmcp import Client
 
@@ -87,10 +89,10 @@ async def test_generated_tools_tolerate_responses_the_spec_misdescribes():
         "/api/orgs/2": {"id": 2, "name": "placetel", "is_user": True},
     }
 
-    def handler(request: httpx.Request) -> httpx.Response:
-        return httpx.Response(200, json=responses[request.url.path])
+    def handler(request: httpx2.Request) -> httpx2.Response:
+        return httpx2.Response(200, json=responses[request.url.path])
 
-    server = create_server(settings(), transport=httpx.MockTransport(handler))
+    server = create_server(settings(), transport=httpx2.MockTransport(handler))
 
     async with Client(server) as client:
         await client.call_tool("list_agent_tasks", {"agent_id": 5})
@@ -109,3 +111,11 @@ async def test_read_only_server_has_no_write_tools():
         "get_step_logs"
     }
     assert {t.name for t in tools} == expected
+
+
+async def test_server_reports_the_package_version():
+    server = create_server(settings())
+
+    async with Client(server) as client:
+        assert client.server_info is not None
+        assert client.server_info.version == version("woodpecker-ci-mcp")
