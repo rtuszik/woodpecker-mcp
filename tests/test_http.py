@@ -233,7 +233,10 @@ async def test_inspector_lists_the_curated_tools_with_portable_schemas(era):
         run = await inspect(url, era, "--method", "tools/list", "--strict")
 
     assert run.exit_code == 0
-    expected = {tool.name for tool in TOOLS.values()} | {"get_step_logs"}
+    expected = {tool.name for tool in TOOLS.values()} | {
+        "get_step_logs",
+        "get_pipeline_config",
+    }
     assert {tool["name"] for tool in run.output["result"]["tools"]} == expected
 
 

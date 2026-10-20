@@ -29,9 +29,6 @@ TOOLS: dict[tuple[str, str], Tool] = {
     # pipelines
     ("GET", "/repos/{repo_id}/pipelines"): Tool("list_pipelines"),
     ("GET", "/repos/{repo_id}/pipelines/{pipeline_number}"): Tool("get_pipeline"),
-    ("GET", "/repos/{repo_id}/pipelines/{pipeline_number}/config"): Tool(
-        "get_pipeline_config"
-    ),
     ("GET", "/repos/{repo_id}/pipelines/{pipeline_number}/metadata"): Tool(
         "get_pipeline_metadata"
     ),

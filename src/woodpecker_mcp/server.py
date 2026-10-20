@@ -7,6 +7,7 @@ from fastmcp import FastMCP
 
 from woodpecker_mcp.auth import WoodpeckerAuth
 from woodpecker_mcp.logs import register_log_tool
+from woodpecker_mcp.pipeline_config import register_config_tool
 from woodpecker_mcp.redact import RedactingTransport
 from woodpecker_mcp.spec import load_spec, prepare_spec
 
@@ -64,4 +65,5 @@ def create_server(
         version=version("woodpecker-ci-mcp"),
     )
     register_log_tool(mcp, client)
+    register_config_tool(mcp, client)
     return mcp
