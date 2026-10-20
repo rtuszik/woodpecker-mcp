@@ -4,6 +4,7 @@ import json
 import httpx2
 import pytest
 from fastmcp import Client
+from fastmcp.exceptions import ToolError
 
 from woodpecker_mcp.server import Settings, create_server
 
@@ -69,3 +70,20 @@ async def test_get_pipeline_config_reports_no_files(files):
         result = await client.call_tool("get_pipeline_config", ARGS)
 
     assert result.data == "(no config files)"
+
+
+async def test_get_pipeline_config_errors_like_the_generated_tools():
+    def handler(_request: httpx2.Request) -> httpx2.Response:
+        return httpx2.Response(404, text="pipeline not found")
+
+    settings = Settings(server_url="https://ci.example.com", token="env-token")
+    server = create_server(settings, transport=httpx2.MockTransport(handler))
+
+    async with Client(server) as client:
+        with pytest.raises(ToolError) as error:
+            await client.call_tool("get_pipeline_config", ARGS)
+
+    assert str(error.value) == (
+        "Error calling tool 'get_pipeline_config': "
+        "HTTP error 404: Not Found - pipeline not found"
+    )

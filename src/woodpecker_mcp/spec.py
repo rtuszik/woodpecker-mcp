@@ -5,7 +5,8 @@ exposes: routes not listed here are dropped, and each entry provides the
 operationId that fastmcp turns into the tool name.
 """
 
-from dataclasses import dataclass
+from collections.abc import Mapping
+from dataclasses import dataclass, field
 from importlib.resources import files
 from typing import Any
 
@@ -16,11 +17,21 @@ import yaml
 class Tool:
     name: str
     write: bool = False
+    # Parameter fields that replace the upstream ones, keyed by parameter name.
+    params: Mapping[str, dict[str, Any]] = field(default_factory=dict)
 
+
+# Upstream types it as int, but the handler also takes the literal "latest".
+PIPELINE_NUMBER_OR_LATEST = {
+    "description": (
+        "the number of the pipeline, or 'latest' for the newest pipeline "
+        "on the default branch"
+    ),
+    "schema": {"anyOf": [{"type": "integer"}, {"type": "string", "enum": ["latest"]}]},
+}
 
 TOOLS: dict[tuple[str, str], Tool] = {
     # repos
-    ("GET", "/user/repos"): Tool("list_repos"),
     ("GET", "/repos/lookup/{repo_full_name}"): Tool("lookup_repo"),
     ("GET", "/repos/{repo_id}"): Tool("get_repo"),
     ("GET", "/repos/{repo_id}/permissions"): Tool("get_repo_permissions"),
@@ -28,7 +39,9 @@ TOOLS: dict[tuple[str, str], Tool] = {
     ("GET", "/repos/{repo_id}/pull_requests"): Tool("list_pull_requests"),
     # pipelines
     ("GET", "/repos/{repo_id}/pipelines"): Tool("list_pipelines"),
-    ("GET", "/repos/{repo_id}/pipelines/{pipeline_number}"): Tool("get_pipeline"),
+    ("GET", "/repos/{repo_id}/pipelines/{pipeline_number}"): Tool(
+        "get_pipeline", params={"pipeline_number": PIPELINE_NUMBER_OR_LATEST}
+    ),
     ("GET", "/repos/{repo_id}/pipelines/{pipeline_number}/metadata"): Tool(
         "get_pipeline_metadata"
     ),
@@ -63,6 +76,9 @@ TOOLS: dict[tuple[str, str], Tool] = {
     ("GET", "/orgs/{org_id}/registries"): Tool("list_org_registries"),
 }
 
+# Served by hand-written tools instead of generated pass-throughs.
+HAND_WRITTEN_TOOLS = frozenset({"list_repos", "get_pipeline_config", "get_step_logs"})
+
 
 def load_spec() -> dict[str, Any]:
     raw = files("woodpecker_mcp").joinpath("openapi.yaml").read_text()
@@ -77,7 +93,7 @@ def prepare_spec(spec: dict[str, Any], *, read_only: bool = False) -> dict[str, 
         operation = dict(spec["paths"][path][method.lower()])
         operation["operationId"] = tool.name
         operation["parameters"] = [
-            param
+            {**param, **tool.params.get(param["name"], {})}
             for param in operation.get("parameters", [])
             if param["name"].lower() != "authorization"
         ]

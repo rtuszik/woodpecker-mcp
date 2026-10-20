@@ -5,7 +5,7 @@ import pytest
 from fastmcp import Client
 
 from woodpecker_mcp.server import Settings, create_server
-from woodpecker_mcp.spec import TOOLS
+from woodpecker_mcp.spec import HAND_WRITTEN_TOOLS, TOOLS
 
 
 def settings(*, read_only: bool = False) -> Settings:
@@ -20,10 +20,7 @@ async def test_server_exposes_exactly_the_curated_tool_names():
     async with Client(server) as client:
         tools = await client.list_tools()
 
-    expected = {tool.name for tool in TOOLS.values()} | {
-        "get_step_logs",
-        "get_pipeline_config",
-    }
+    expected = {tool.name for tool in TOOLS.values()} | HAND_WRITTEN_TOOLS
     assert {t.name for t in tools} == expected
 
 
@@ -110,10 +107,9 @@ async def test_read_only_server_has_no_write_tools():
     async with Client(server) as client:
         tools = await client.list_tools()
 
-    expected = {tool.name for tool in TOOLS.values() if not tool.write} | {
-        "get_step_logs",
-        "get_pipeline_config",
-    }
+    expected = {
+        tool.name for tool in TOOLS.values() if not tool.write
+    } | HAND_WRITTEN_TOOLS
     assert {t.name for t in tools} == expected
 
 
@@ -123,3 +119,22 @@ async def test_server_reports_the_package_version():
     async with Client(server) as client:
         assert client.server_info is not None
         assert client.server_info.version == version("woodpecker-ci-mcp")
+
+
+@pytest.mark.parametrize(("number", "path"), [(42, "42"), ("latest", "latest")])
+async def test_get_pipeline_takes_a_number_or_latest(number, path):
+    captured: list[httpx2.Request] = []
+
+    def handler(request: httpx2.Request) -> httpx2.Response:
+        captured.append(request)
+        return httpx2.Response(200, json={"number": 42})
+
+    server = create_server(settings(), transport=httpx2.MockTransport(handler))
+
+    async with Client(server) as client:
+        await client.call_tool(
+            "get_pipeline", {"repo_id": 3, "pipeline_number": number}
+        )
+
+    (request,) = captured
+    assert request.url.path == f"/api/repos/3/pipelines/{path}"

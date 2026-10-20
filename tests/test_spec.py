@@ -42,3 +42,17 @@ def test_prepared_spec_has_no_authorization_parameters(raw_spec):
     for op in operations(prepared).values():
         for param in op.get("parameters", []):
             assert param["name"].lower() != "authorization"
+
+
+def test_get_pipeline_number_accepts_latest(raw_spec):
+    ops = operations(prepare_spec(raw_spec))
+
+    get_pipeline = ops[("GET", "/repos/{repo_id}/pipelines/{pipeline_number}")]
+    params = {param["name"]: param for param in get_pipeline["parameters"]}
+
+    assert params["pipeline_number"]["schema"] == {
+        "anyOf": [{"type": "integer"}, {"type": "string", "enum": ["latest"]}]
+    }
+    assert "default branch" in params["pipeline_number"]["description"]
+    assert params["pipeline_number"]["in"] == "path"
+    assert params["repo_id"]["schema"] == {"type": "integer"}

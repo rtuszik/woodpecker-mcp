@@ -2,7 +2,9 @@ import base64
 import json
 
 import httpx2
+import pytest
 from fastmcp import Client
+from fastmcp.exceptions import ToolError
 
 from woodpecker_mcp.server import Settings, create_server
 
@@ -95,3 +97,22 @@ async def test_get_step_logs_handles_null_body():
         )
 
     assert result.data == "(no log output)"
+
+
+async def test_get_step_logs_errors_like_the_generated_tools():
+    def handler(_request: httpx2.Request) -> httpx2.Response:
+        return httpx2.Response(404)
+
+    settings = Settings(server_url="https://ci.example.com", token="env-token")
+    server = create_server(settings, transport=httpx2.MockTransport(handler))
+
+    async with Client(server) as client:
+        with pytest.raises(ToolError) as error:
+            await client.call_tool(
+                "get_step_logs", {"repo_id": 3, "pipeline_number": 42, "step_id": 1}
+            )
+
+    assert (
+        str(error.value)
+        == "Error calling tool 'get_step_logs': HTTP error 404: Not Found"
+    )

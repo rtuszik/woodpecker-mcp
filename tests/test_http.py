@@ -18,7 +18,7 @@ from fastmcp.exceptions import ToolError
 from sse_starlette.sse import AppStatus
 
 from woodpecker_mcp.server import Settings, create_server
-from woodpecker_mcp.spec import TOOLS
+from woodpecker_mcp.spec import HAND_WRITTEN_TOOLS, TOOLS
 
 MODERN = "2026-07-28"
 LEGACY = "2025-11-25"
@@ -233,10 +233,7 @@ async def test_inspector_lists_the_curated_tools_with_portable_schemas(era):
         run = await inspect(url, era, "--method", "tools/list", "--strict")
 
     assert run.exit_code == 0
-    expected = {tool.name for tool in TOOLS.values()} | {
-        "get_step_logs",
-        "get_pipeline_config",
-    }
+    expected = {tool.name for tool in TOOLS.values()} | HAND_WRITTEN_TOOLS
     assert {tool["name"] for tool in run.output["result"]["tools"]} == expected
 
 

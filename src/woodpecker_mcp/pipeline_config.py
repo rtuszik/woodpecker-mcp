@@ -8,6 +8,8 @@ import base64
 import httpx2
 from fastmcp import FastMCP
 
+from woodpecker_mcp.upstream import raise_for_status
+
 
 def register_config_tool(mcp: FastMCP, client: httpx2.AsyncClient) -> None:
     @mcp.tool
@@ -19,7 +21,7 @@ def register_config_tool(mcp: FastMCP, client: httpx2.AsyncClient) -> None:
         response = await client.get(
             f"/repos/{repo_id}/pipelines/{pipeline_number}/config"
         )
-        response.raise_for_status()
+        raise_for_status(response)
         files = [
             f"==> {entry['name']} <==\n"
             + base64.b64decode(entry.get("data") or "")
