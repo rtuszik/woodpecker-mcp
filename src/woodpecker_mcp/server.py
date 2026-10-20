@@ -7,8 +7,10 @@ from fastmcp import FastMCP
 
 from woodpecker_mcp.auth import WoodpeckerAuth
 from woodpecker_mcp.logs import register_log_tool
+from woodpecker_mcp.nulls import NullListTransport
 from woodpecker_mcp.pipeline_config import register_config_tool
 from woodpecker_mcp.redact import RedactingTransport
+from woodpecker_mcp.repos import register_repo_tool
 from woodpecker_mcp.spec import load_spec, prepare_spec
 
 _TRUTHY = {"1", "true", "yes", "on"}
@@ -55,7 +57,9 @@ def create_server(
     client = httpx2.AsyncClient(
         base_url=settings.server_url.rstrip("/") + "/api",
         auth=WoodpeckerAuth(settings.token),
-        transport=RedactingTransport(transport or httpx2.AsyncHTTPTransport()),
+        transport=RedactingTransport(
+            NullListTransport(transport or httpx2.AsyncHTTPTransport())
+        ),
     )
     spec = prepare_spec(load_spec(), read_only=settings.read_only)
     mcp = FastMCP.from_openapi(
@@ -66,4 +70,5 @@ def create_server(
     )
     register_log_tool(mcp, client)
     register_config_tool(mcp, client)
+    register_repo_tool(mcp, client)
     return mcp

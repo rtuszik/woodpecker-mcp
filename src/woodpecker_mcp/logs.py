@@ -12,6 +12,8 @@ import httpx2
 from fastmcp import FastMCP
 from pydantic import Field
 
+from woodpecker_mcp.upstream import raise_for_status
+
 
 def register_log_tool(mcp: FastMCP, client: httpx2.AsyncClient) -> None:
     @mcp.tool
@@ -31,7 +33,7 @@ def register_log_tool(mcp: FastMCP, client: httpx2.AsyncClient) -> None:
         response = await client.get(
             f"/repos/{repo_id}/logs/{pipeline_number}/{step_id}"
         )
-        response.raise_for_status()
+        raise_for_status(response)
         # Both the body and individual line blobs may be null (purged logs).
         lines = [
             base64.b64decode(entry["data"]).decode(errors="replace").rstrip("\n")
