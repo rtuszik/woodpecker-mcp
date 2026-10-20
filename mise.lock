@@ -57,12 +57,27 @@ checksum = "sha256:379949f50c4f8245ef9532913e83f351c048b55e40ebd52ed8a850642c07a
 url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-aarch64-unknown-linux-gnu.tar.gz"
 url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659384"
 
+[tools.cocogitto."platforms.linux-arm64-musl"]
+checksum = "sha256:379949f50c4f8245ef9532913e83f351c048b55e40ebd52ed8a850642c07a753"
+url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659384"
+
 [tools.cocogitto."platforms.linux-x64"]
 checksum = "sha256:e03938ff2c4c86d71c00c0f3284dbbe95c5ca76fe34a51f33e945c23010d59bb"
 url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-unknown-linux-musl.tar.gz"
 url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659350"
 
+[tools.cocogitto."platforms.linux-x64-baseline"]
+checksum = "sha256:e03938ff2c4c86d71c00c0f3284dbbe95c5ca76fe34a51f33e945c23010d59bb"
+url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659350"
+
 [tools.cocogitto."platforms.linux-x64-musl"]
+checksum = "sha256:e03938ff2c4c86d71c00c0f3284dbbe95c5ca76fe34a51f33e945c23010d59bb"
+url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659350"
+
+[tools.cocogitto."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:e03938ff2c4c86d71c00c0f3284dbbe95c5ca76fe34a51f33e945c23010d59bb"
 url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-unknown-linux-musl.tar.gz"
 url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659350"
@@ -77,7 +92,17 @@ checksum = "sha256:591dcd462e2e35ecc21caf41a15a65d464b7ce1ce8a5c299fa0d46a7798dd
 url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659418"
 
+[tools.cocogitto."platforms.macos-x64-baseline"]
+checksum = "sha256:591dcd462e2e35ecc21caf41a15a65d464b7ce1ce8a5c299fa0d46a7798dddb0"
+url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659418"
+
 [tools.cocogitto."platforms.windows-x64"]
+checksum = "sha256:074f68f05d270da5c0d69d3e234ec362bec4c6e3189c21d1c948d038603655d7"
+url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-pc-windows-msvc.tar.gz"
+url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659399"
+
+[tools.cocogitto."platforms.windows-x64-baseline"]
 checksum = "sha256:074f68f05d270da5c0d69d3e234ec362bec4c6e3189c21d1c948d038603655d7"
 url = "https://github.com/cocogitto/cocogitto/releases/download/7.0.0/cocogitto-7.0.0-x86_64-pc-windows-msvc.tar.gz"
 url_api = "https://api.github.com/repos/cocogitto/cocogitto/releases/assets/366659399"
@@ -98,7 +123,15 @@ url = "https://unofficial-builds.nodejs.org/download/release/v24.21.0/node-v24.2
 checksum = "sha256:6e1db87ef58b8819e5d5402eff1536491b18edd8eb7bee5ef7897876e88dc5ff"
 url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-x64.tar.gz"
 
+[tools.node."platforms.linux-x64-baseline"]
+checksum = "sha256:6e1db87ef58b8819e5d5402eff1536491b18edd8eb7bee5ef7897876e88dc5ff"
+url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-linux-x64.tar.gz"
+
 [tools.node."platforms.linux-x64-musl"]
+checksum = "sha256:01a713e34da98e7b4d2a3191ee7ca3f93dd0384d1a2ef23c379b2161ee6e133a"
+url = "https://unofficial-builds.nodejs.org/download/release/v24.21.0/node-v24.21.0-linux-x64-musl.tar.gz"
+
+[tools.node."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:01a713e34da98e7b4d2a3191ee7ca3f93dd0384d1a2ef23c379b2161ee6e133a"
 url = "https://unofficial-builds.nodejs.org/download/release/v24.21.0/node-v24.21.0-linux-x64-musl.tar.gz"
 
@@ -110,7 +143,15 @@ url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz"
 checksum = "sha256:1462cb3b3046b815cf8ea436d3da450ec1a9f11dac7e5a46b0ada5305d7e8097"
 url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-x64.tar.gz"
 
+[tools.node."platforms.macos-x64-baseline"]
+checksum = "sha256:1462cb3b3046b815cf8ea436d3da450ec1a9f11dac7e5a46b0ada5305d7e8097"
+url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-x64.tar.gz"
+
 [tools.node."platforms.windows-x64"]
+checksum = "sha256:158f7685b44de51f6c0df1d153526cbcd3e1bc739a8dfc607721cef75de9e541"
+url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-win-x64.zip"
+
+[tools.node."platforms.windows-x64-baseline"]
 checksum = "sha256:158f7685b44de51f6c0df1d153526cbcd3e1bc739a8dfc607721cef75de9e541"
 url = "https://nodejs.org/dist/v24.21.0/node-v24.21.0-win-x64.zip"
 
@@ -136,7 +177,19 @@ url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-unknown
 url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684555"
 provenance = "github-attestations"
 
+[tools.prek."platforms.linux-x64-baseline"]
+checksum = "sha256:5470e4aa0fc0ad9d3de7dfaf088fb746d59c2eda3b173c06418e7c8861a520eb"
+url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684555"
+provenance = "github-attestations"
+
 [tools.prek."platforms.linux-x64-musl"]
+checksum = "sha256:57948d4772f4eb58387ce4a6d619ecd2d8d7e9d765eed6a316f5b3f92c86d951"
+url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684574"
+provenance = "github-attestations"
+
+[tools.prek."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:57948d4772f4eb58387ce4a6d619ecd2d8d7e9d765eed6a316f5b3f92c86d951"
 url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-unknown-linux-musl.tar.gz"
 url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684574"
@@ -154,7 +207,19 @@ url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-apple-d
 url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684529"
 provenance = "github-attestations"
 
+[tools.prek."platforms.macos-x64-baseline"]
+checksum = "sha256:9ea09639374a34b6f0b7d2a2567c175221cd37e44004e9b1cf591f31f9dda1b3"
+url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684529"
+provenance = "github-attestations"
+
 [tools.prek."platforms.windows-x64"]
+checksum = "sha256:6e52e1723b1b753b977be632a150d5516862471b29c14ad8e7d71685f07769b4"
+url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684549"
+provenance = "github-attestations"
+
+[tools.prek."platforms.windows-x64-baseline"]
 checksum = "sha256:6e52e1723b1b753b977be632a150d5516862471b29c14ad8e7d71685f07769b4"
 url = "https://github.com/j178/prek/releases/download/v0.5.5/prek-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/j178/prek/releases/assets/611684549"
@@ -179,9 +244,19 @@ checksum = "sha256:ffcb50e716789d1a6e1db5e745d4d194ac8ed9b015ccf5eabcaccb179a25e
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
+[tools.python."platforms.linux-x64-baseline"]
+checksum = "sha256:d0080766b6b74aeb81e1949ef0d9a20e6c17f7b160fb295a69b936ccb17660be"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16+20261013-x86_64-unknown-linux-gnu-install_only_stripped.tar.gz"
+provenance = "github-attestations"
+
 [tools.python."platforms.linux-x64-musl"]
 checksum = "sha256:31b1f560c68313c00bab4faa2452bc0a87e3e9f9ddf16b94d2265bd9d99afc2e"
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-unknown-linux-musl-install_only_stripped.tar.gz"
+provenance = "github-attestations"
+
+[tools.python."platforms.linux-x64-musl-baseline"]
+checksum = "sha256:a177ce931ddc616c0e76eebc6a583196739dc704d47af853f5958cb95b2b1c96"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16+20261013-x86_64-unknown-linux-musl-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [tools.python."platforms.macos-arm64"]
@@ -194,9 +269,19 @@ checksum = "sha256:a88bef59d9dd61ba4210772cce57a4b4cb963aa745ab956f7cc79ba60f9e2
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
+[tools.python."platforms.macos-x64-baseline"]
+checksum = "sha256:f507ae04eb7747cd97cb484e8c5d83936cbfc52d9b08a1f35c00b47c707b1ae1"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16+20261013-x86_64-apple-darwin-install_only_stripped.tar.gz"
+provenance = "github-attestations"
+
 [tools.python."platforms.windows-x64"]
 checksum = "sha256:c402eb9a35aba90de319bbc87d23e6d887eca1551a05cfa80775f92dcf3ebc08"
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261001/cpython-3.13.16+20261001-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
+provenance = "github-attestations"
+
+[tools.python."platforms.windows-x64-baseline"]
+checksum = "sha256:7aba3985d4cee1c7cacb963ca6aa08a5d3e695d7f9609d9fabc56f22ddcf5a06"
+url = "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16+20261013-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
 [[tools.uv]]
@@ -221,7 +306,19 @@ url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-unkno
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232628"
 provenance = "github-attestations"
 
+[tools.uv."platforms.linux-x64-baseline"]
+checksum = "sha256:9167d72b3319674b6303c4cbe071854bba13ebdf3d76b1a7cbdc175471fb66d6"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232628"
+provenance = "github-attestations"
+
 [tools.uv."platforms.linux-x64-musl"]
+checksum = "sha256:1cff8783850e794470aadb73f54b749542a511fc57b0ce6468b64bd3852e0ade"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232639"
+provenance = "github-attestations"
+
+[tools.uv."platforms.linux-x64-musl-baseline"]
 checksum = "sha256:1cff8783850e794470aadb73f54b749542a511fc57b0ce6468b64bd3852e0ade"
 url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-unknown-linux-musl.tar.gz"
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232639"
@@ -239,7 +336,19 @@ url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-apple
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232607"
 provenance = "github-attestations"
 
+[tools.uv."platforms.macos-x64-baseline"]
+checksum = "sha256:960da44cb4b73685206ddd250b19e0a117fa41095710c1038f081f5cb613efb4"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232607"
+provenance = "github-attestations"
+
 [tools.uv."platforms.windows-x64"]
+checksum = "sha256:75d05de6762778c31ee183398de7dd15093fad0ed90b1f236d8205ea5ec00c90"
+url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232617"
+provenance = "github-attestations"
+
+[tools.uv."platforms.windows-x64-baseline"]
 checksum = "sha256:75d05de6762778c31ee183398de7dd15093fad0ed90b1f236d8205ea5ec00c90"
 url = "https://github.com/astral-sh/uv/releases/download/0.12.23/uv-x86_64-pc-windows-msvc.zip"
 url_api = "https://api.github.com/repos/astral-sh/uv/releases/assets/608232617"

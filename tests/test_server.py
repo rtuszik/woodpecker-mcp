@@ -20,7 +20,10 @@ async def test_server_exposes_exactly_the_curated_tool_names():
     async with Client(server) as client:
         tools = await client.list_tools()
 
-    expected = {tool.name for tool in TOOLS.values()} | {"get_step_logs"}
+    expected = {tool.name for tool in TOOLS.values()} | {
+        "get_step_logs",
+        "get_pipeline_config",
+    }
     assert {t.name for t in tools} == expected
 
 
@@ -108,7 +111,8 @@ async def test_read_only_server_has_no_write_tools():
         tools = await client.list_tools()
 
     expected = {tool.name for tool in TOOLS.values() if not tool.write} | {
-        "get_step_logs"
+        "get_step_logs",
+        "get_pipeline_config",
     }
     assert {t.name for t in tools} == expected
 
