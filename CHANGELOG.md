@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.5.2](https://github.com/rtuszik/woodpecker-mcp/compare/f9823a30b390073cea4204e9d528e38753de944d..v0.5.2) - 2026-10-21
+#### Bug Fixes
+- enforce response and log size limits - ([6d059d6](https://github.com/rtuszik/woodpecker-mcp/commit/6d059d6c681ea317de6d00767333d575889058d0)) - Robin Tuszik
+#### Miscellaneous Chores
+- (**deps**) update dependency bun to latest - ([d545c86](https://github.com/rtuszik/woodpecker-mcp/commit/d545c86fad27190827177b2b95b9f3c0f21183e3)) - koalabot-rt[bot]
+- (**deps**) update jdx/mise-action action to v5 - ([2fb0fc1](https://github.com/rtuszik/woodpecker-mcp/commit/2fb0fc1cd62e05536463e77ea7568cb46dc6b90f)) - koalabot-rt[bot]
+- (**deps**) update astral-sh/setup-uv action to v10.3.0 - ([895589b](https://github.com/rtuszik/woodpecker-mcp/commit/895589b2cb83af259dbfb560737a2f3bd4de7242)) - koalabot-rt[bot]
+- (**deps**) update dependency uv_build to >=0.13,<0.14 - ([61d3739](https://github.com/rtuszik/woodpecker-mcp/commit/61d37395ed885525de09d0247fafe41212fcb24a)) - koalabot-rt[bot]
+- (**deps**) update ghcr.io/astral-sh/uv docker tag to v0.13.4 - ([e327879](https://github.com/rtuszik/woodpecker-mcp/commit/e3278790410ff3c6dda6c50e22caf9e2173fb77a)) - koalabot-rt[bot]
+- (**deps**) update dependency uv to latest - ([68ff9a2](https://github.com/rtuszik/woodpecker-mcp/commit/68ff9a2a996fdb1b48a0f25ca6a669ab38e97e3c)) - koalabot-rt[bot]
+- (**deps**) update jdx/mise-action action to v5 - ([9556600](https://github.com/rtuszik/woodpecker-mcp/commit/9556600aae0624a069c8efdd48d95cbdfe07f6d4)) - koalabot-rt[bot]
+- (**deps**) update zizmorcore/zizmor-action action to v0.7.1 - ([f9823a3](https://github.com/rtuszik/woodpecker-mcp/commit/f9823a30b390073cea4204e9d528e38753de944d)) - koalabot-rt[bot]
+
+- - -
+
 ## [v0.5.1](https://github.com/rtuszik/woodpecker-mcp/compare/5d4339df1c520fdfa2ba5b212844eda21ae58c9e..v0.5.1) - 2026-10-21
 #### Bug Fixes
 - list_repos tolerates repos without an id and filters by name - ([405e5a6](https://github.com/rtuszik/woodpecker-mcp/commit/405e5a6b47011c1e06034a80a67d1ba420735806)) - Robin Tuszik
