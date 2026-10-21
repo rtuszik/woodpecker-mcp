@@ -17,7 +17,7 @@ _PIPELINE_FIELDS = ("number", "status", "event", "branch", "created")
 def summarize(repo: dict[str, Any]) -> dict[str, Any]:
     last = repo.get("last_pipeline")
     return {
-        "id": repo["id"],
+        "id": repo.get("id"),
         "full_name": repo["full_name"],
         "org_id": repo.get("org_id"),
         "default_branch": repo.get("default_branch"),
@@ -48,4 +48,8 @@ def register_repo_tool(mcp: FastMCP, client: httpx2.AsyncClient) -> None:
             params["name"] = name
         response = await client.get("/user/repos", params=params)
         raise_for_status(response)
-        return [summarize(repo) for repo in response.json() or []]
+        repos = response.json() or []
+        # Upstream skips the name filter for the forge list that `all` adds.
+        if name:
+            repos = [repo for repo in repos if repo.get("name") == name]
+        return [summarize(repo) for repo in repos]

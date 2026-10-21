@@ -20,6 +20,7 @@ PIPELINE = {
 }
 REPO = {
     "id": 5,
+    "name": "neo",
     "full_name": "Placetel/neo",
     "org_id": 2,
     "default_branch": "main",
@@ -103,3 +104,36 @@ async def test_list_repos_errors_like_the_generated_tools():
     assert str(error.value) == (
         "Error calling tool 'list_repos': HTTP error 401: Unauthorized - \"bad token\""
     )
+
+
+def forge_only(name: str) -> dict:
+    """A forge repo that `all` adds but Woodpecker has not activated: no id."""
+    repo = {
+        key: value for key, value in REPO.items() if key not in {"id", "last_pipeline"}
+    }
+    return {**repo, "name": name, "full_name": f"Placetel/{name}", "active": False}
+
+
+async def test_list_repos_summarizes_forge_repos_without_an_id():
+    server = server_returning([forge_only("aspgpt")], [])
+
+    async with Client(server) as client:
+        result = await client.call_tool("list_repos", {"include_inactive": True})
+
+    (summary,) = result.data
+    assert summary["id"] is None
+    assert summary["full_name"] == "Placetel/aspgpt"
+    assert summary["active"] is False
+    assert summary["last_pipeline"] is None
+
+
+async def test_list_repos_applies_the_name_filter_to_forge_repos_too():
+    upstream = [REPO, {**REPO, "id": 1, "name": "accounts"}, forge_only("aspgpt")]
+    server = server_returning(upstream, [])
+
+    async with Client(server) as client:
+        result = await client.call_tool(
+            "list_repos", {"include_inactive": True, "name": "neo"}
+        )
+
+    assert [repo["full_name"] for repo in result.data] == ["Placetel/neo"]
