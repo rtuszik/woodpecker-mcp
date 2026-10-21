@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.5.1](https://github.com/rtuszik/woodpecker-mcp/compare/5d4339df1c520fdfa2ba5b212844eda21ae58c9e..v0.5.1) - 2026-10-21
+#### Bug Fixes
+- list_repos tolerates repos without an id and filters by name - ([405e5a6](https://github.com/rtuszik/woodpecker-mcp/commit/405e5a6b47011c1e06034a80a67d1ba420735806)) - Robin Tuszik
+#### Documentation
+- rewrite README for clarity on transports and authentication - ([6da076f](https://github.com/rtuszik/woodpecker-mcp/commit/6da076ffc87d3b5da8438a89afad1f417c0ff0b3)) - Robin Tuszik
+#### Miscellaneous Chores
+- add Apache 2.0 license - ([5d4339d](https://github.com/rtuszik/woodpecker-mcp/commit/5d4339df1c520fdfa2ba5b212844eda21ae58c9e)) - Robin Tuszik
+
+- - -
+
 ## [v0.5.0](https://github.com/rtuszik/woodpecker-mcp/compare/889c984a66b169895dc778eeb77cb4c8ff485c8b..v0.5.0) - 2026-10-21
 #### Features
 - (**pipeline-config**) add get_pipeline_config decoding base64 to yaml - ([f0a45d7](https://github.com/rtuszik/woodpecker-mcp/commit/f0a45d7d0bbd93fa5d53172966722aa0b63ea82a)) - Robin Tuszik
