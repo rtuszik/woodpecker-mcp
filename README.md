@@ -1,14 +1,18 @@
 # woodpecker-mcp
 
-An MCP server for [Woodpecker CI](https://woodpecker-ci.org/), generated from the
-Woodpecker OpenAPI spec with [fastmcp](https://gofastmcp.com/) and served over
-streamable HTTP.
+An MCP server for [Woodpecker CI](https://woodpecker-ci.org/), generated from
+the Woodpecker OpenAPI spec with [fastmcp](https://gofastmcp.com/). Both
+streamable HTTP (default) and stdio are supported.
 
-The tool surface is a curated allowlist, not the full API: all the reads an agent
-needs to answer "why is my build red / stuck", plus exactly five write
-operations (trigger, restart, cancel, approve, decline pipeline). Everything
-else, repo/secret/cron/agent CRUD, forge and system administration, is not
-exposed.
+The server supports stateless MCP (spec `2026-07-28`),
+so any number of replicas can run behind a plain load balancer without
+session affinity.
+
+Only a subset of the Woodpecker API is exposed: read access to repos,
+pipelines, logs, orgs, and agents, plus five pipeline write operations
+(trigger, restart, cancel, approve, decline). Management of repos, secrets,
+crons, and agents is not exposed, and neither is forge or system
+administration.
 
 ## Tools
 
@@ -17,51 +21,46 @@ exposed.
 | Repos                                | `list_repos`, `lookup_repo`, `get_repo`, `get_repo_permissions`, `list_branches`, `list_pull_requests` |
 | Pipelines                            | `list_pipelines`, `get_pipeline`, `get_pipeline_config`, `get_pipeline_metadata`                       |
 | Pipeline ops (write)                 | `trigger_pipeline`, `restart_pipeline`, `cancel_pipeline`, `approve_pipeline`, `decline_pipeline`      |
-| Logs                                 | `get_step_logs`, plain-text step logs, base64-decoded, tailed (default 200 lines)                      |
+| Logs                                 | `get_step_logs`                                                                                        |
 | Orgs                                 | `lookup_org`, `get_org`, `get_org_permissions`                                                         |
 | Queue & agents                       | `get_queue_info`, `list_agents`, `get_agent`, `list_agent_tasks`                                       |
 | Secrets & registries (metadata only) | `list_repo_secrets`, `list_org_secrets`, `list_repo_registries`, `list_org_registries`                 |
 
+`get_step_logs` returns plain text and defaults to the last 200 lines.
+
 ## Configuration
 
-| Variable                   | Required | Description                                                                           |
-| -------------------------- | -------- | ------------------------------------------------------------------------------------- |
-| `WOODPECKER_SERVER`        | yes      | Base URL of the Woodpecker server, e.g. `https://ci.example.com` (`/api` is appended) |
-| `WOODPECKER_TOKEN`         | see below | Personal access token used as a shared fallback for upstream API calls               |
-| `WOODPECKER_MCP_READ_ONLY` | no       | `true`/`1`/`yes`/`on` removes the five write tools entirely                           |
-| `WOODPECKER_MCP_TRANSPORT` | no       | `http` (default) or `stdio`                                                           |
-| `HOST`                     | no       | Bind address (http only), default `0.0.0.0`                                           |
-| `PORT`                     | no       | Bind port (http only), default `8000`                                                 |
+| Variable                   | Required   | Description                                                                |
+| -------------------------- | ---------- | -------------------------------------------------------------------------- |
+| `WOODPECKER_SERVER`        | yes        | Woodpecker server URL, e.g. `https://ci.example.com` (`/api` is appended). |
+| `WOODPECKER_TOKEN`         | stdio only | Personal access token. Optional with streamable HTTP, see below.           |
+| `WOODPECKER_MCP_READ_ONLY` | no         | `true`, `1`, `yes`, or `on` removes the five write tools.                  |
+| `WOODPECKER_MCP_TRANSPORT` | no         | `http` (default) or `stdio`.                                               |
+| `HOST`                     | no         | Bind address for streamable HTTP. Default `0.0.0.0`.                       |
+| `PORT`                     | no         | Bind port for streamable HTTP. Default `8000`.                             |
 
-### Multi-client authentication (http)
+## Authentication
 
-Each client authenticates as its own Woodpecker user by sending its personal
-access token as a standard bearer header with every request:
+With streamable HTTP, each client sends its own Woodpecker personal access
+token as a bearer header:
 
 ```text
 Authorization: Bearer <woodpecker-token>
 ```
 
-The token is forwarded upstream for that request only; a shared
-`httpx2.AsyncClient` reads the header per request, so clients never see each
-other's credentials. `WOODPECKER_TOKEN` is optional under http, if set, it is
-used as a fallback for requests that carry no bearer token of their own. A
-request with neither its own token nor a configured fallback is rejected.
+The token is forwarded to Woodpecker for that request only, so clients never
+share credentials. Requests without a token fall back to `WOODPECKER_TOKEN` if
+set and are rejected otherwise.
 
-Under the **stdio** transport there are no per-request headers, so
-`WOODPECKER_TOKEN` is required and always used.
+With stdio there are no request headers, so `WOODPECKER_TOKEN` is required.
 
-The server performs no authentication of its own beyond forwarding the token,
-deploy it on a trusted network (e.g. behind TLS). `token` fields in upstream
-responses (e.g. agent registration tokens, which Woodpecker returns in
-cleartext to admin PATs) are redacted before reaching the client.
+The server does not authenticate clients itself, so run it on a trusted network
+or behind TLS. `token` fields in Woodpecker responses, such as agent
+registration tokens, are redacted before they reach the client.
 
 ## Running
 
 ### Docker (streamable HTTP)
-
-Run the server once; each client authenticates per request with its own token,
-so no shared `WOODPECKER_TOKEN` is required:
 
 ```sh
 docker run -p 8000:8000 \
@@ -69,28 +68,24 @@ docker run -p 8000:8000 \
   ghcr.io/rtuszik/woodpecker-mcp:latest
 ```
 
-Add `-e WOODPECKER_TOKEN=...` only if you want a shared fallback token for
-clients that connect without one of their own.
+Clients send their own tokens, so `WOODPECKER_TOKEN` is optional here. Set it
+to provide a fallback for clients without one.
 
-The MCP endpoint is `http://<host>:8000/mcp` (streamable HTTP).
+The streamable HTTP endpoint is `http://<host>:8000/mcp`.
 
-The server keeps no session state, so any number of replicas can run behind
-an ordinary load balancer without session affinity. Clients on the
-`2026-07-28` protocol are sessionless by design; older clients are served in
-stateless mode, without an `Mcp-Session-Id` or a standalone SSE stream.
+Clients on protocol versions older than `2026-07-28` are served in stateless
+mode, without an `Mcp-Session-Id` or a standalone SSE stream.
 
-### Connecting a client (remote HTTP)
+### Connecting a client (streamable HTTP)
 
-Point the client at wherever the server is deployed and send your own
-Woodpecker personal access token as a bearer header. Replace the URL below with
-your server's endpoint. In Claude Code:
+Claude Code:
 
 ```sh
 claude mcp add --transport http woodpecker https://your-mcp-host/mcp \
   --header "Authorization: Bearer <your-woodpecker-token>"
 ```
 
-or in a generic MCP client config:
+Generic MCP client config:
 
 ```json
 {
@@ -106,20 +101,17 @@ or in a generic MCP client config:
 }
 ```
 
-Every request carries the header, so the server acts as your Woodpecker user
-for that request only. Different clients can hit the same server with different
-tokens.
-
-A plain `http://` URL works too (e.g. on a trusted LAN without TLS), though
-some clients refuse to send an `Authorization` header over non-HTTPS; prefer
-terminating TLS at a reverse proxy for anything exposed beyond localhost.
+Replace `your-mcp-host` with your server's address. Some clients may refuse to send
+an `Authorization` header over plain `http://`, so terminate TLS at a reverse
+proxy for anything beyond localhost.
 
 ### uvx (stdio)
 
-The package is published to PyPI as
+The package is published on PyPI as
 [`woodpecker-ci-mcp`](https://pypi.org/project/woodpecker-ci-mcp/). With
-`WOODPECKER_MCP_TRANSPORT=stdio` the server speaks MCP over stdin/stdout, so a
-client can spawn it directly. Register it with e.g. Claude Code:
+`WOODPECKER_MCP_TRANSPORT=stdio`, a client can start the server directly.
+
+Claude Code:
 
 ```sh
 claude mcp add woodpecker \
@@ -129,7 +121,7 @@ claude mcp add woodpecker \
   -- uvx woodpecker-ci-mcp
 ```
 
-or in a generic MCP client config:
+Generic MCP client config:
 
 ```json
 {
@@ -147,16 +139,14 @@ or in a generic MCP client config:
 }
 ```
 
-In stdio mode there are no per-request headers, so the configured
-`WOODPECKER_TOKEN` is always used.
-
 ## Development
 
 ```sh
+mise install
 uv sync            # install
 uv run pytest      # tests
 mise run check     # format, lint, typecheck, tests
 ```
 
-The bundled spec lives at `src/woodpecker_mcp/openapi.yaml`; the allowlist that
-defines the tool surface is `src/woodpecker_mcp/spec.py`.
+The OpenAPI spec is in `src/woodpecker_mcp/openapi.yaml` and the tool allowlist
+is in `src/woodpecker_mcp/spec.py`.
