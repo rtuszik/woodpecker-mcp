@@ -57,8 +57,8 @@ def create_server(
     client = httpx2.AsyncClient(
         base_url=settings.server_url.rstrip("/") + "/api",
         auth=WoodpeckerAuth(settings.token),
-        transport=RedactingTransport(
-            NullListTransport(transport or httpx2.AsyncHTTPTransport())
+        transport=NullListTransport(
+            RedactingTransport(transport or httpx2.AsyncHTTPTransport())
         ),
     )
     spec = prepare_spec(load_spec(), read_only=settings.read_only)
