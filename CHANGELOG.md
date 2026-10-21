@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.5.0](https://github.com/rtuszik/woodpecker-mcp/compare/889c984a66b169895dc778eeb77cb4c8ff485c8b..v0.5.0) - 2026-10-21
+#### Features
+- (**pipeline-config**) add get_pipeline_config decoding base64 to yaml - ([f0a45d7](https://github.com/rtuszik/woodpecker-mcp/commit/f0a45d7d0bbd93fa5d53172966722aa0b63ea82a)) - Robin Tuszik
+- expose package version in server info and add mcp inspector tests - ([9f1a5ef](https://github.com/rtuszik/woodpecker-mcp/commit/9f1a5ef5b5c79604a3b5870157e1e9390ab72287)) - Robin Tuszik
+- enable stateless HTTP transport for sessionless clients - ([8705a08](https://github.com/rtuszik/woodpecker-mcp/commit/8705a082fb6b3646b498afc3ae0bc59c4fed96a6)) - Robin Tuszik
+- ![BREAKING](https://img.shields.io/badge/BREAKING-red) migrate to fastmcp 4 with mcp 2.0 - ([938c5ea](https://github.com/rtuszik/woodpecker-mcp/commit/938c5ea1e9b2f6a22705e17d6051dd6c37a4db0f)) - Robin Tuszik
+#### Bug Fixes
+- slim list_repos, null list handling and latest pipeline, uniform errors - ([fe42af9](https://github.com/rtuszik/woodpecker-mcp/commit/fe42af94cf7709866506d95b4423a3e37f90f6c0)) - Robin Tuszik
+#### Tests
+- (**http**) add token forwarding and fallback coverage - ([a0ea00d](https://github.com/rtuszik/woodpecker-mcp/commit/a0ea00daa20716d4666921992a28462c7aa663c1)) - Robin Tuszik
+#### Build system
+- (**deps**) update httpx2 and MCP dependencies - ([06fc492](https://github.com/rtuszik/woodpecker-mcp/commit/06fc49220333b9458b0d1a0caf7ccdb49b0e1e5b)) - Robin Tuszik
+- update FastMCP dependency to 4.1.0 - ([a0ca84d](https://github.com/rtuszik/woodpecker-mcp/commit/a0ca84d719acd7c56545e98404da1dc1bfc0367b)) - Robin Tuszik
+#### Continuous Integration
+- verify conventional commit messages with cog in commit-msg hook - ([24246c6](https://github.com/rtuszik/woodpecker-mcp/commit/24246c626e6c2a1ef98bb82aad2db008bcf6a03d)) - Robin Tuszik
+#### Miscellaneous Chores
+- (**deps**) update dependency prek to latest (#33) - ([0a7c460](https://github.com/rtuszik/woodpecker-mcp/commit/0a7c46091138fa340f1332a3821dd5e0ea173577)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update dependency uv to latest (#34) - ([b446ab6](https://github.com/rtuszik/woodpecker-mcp/commit/b446ab6ebdd8601ed8f8334c2d09098da15356c1)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update docker/setup-buildx-action action to v4.4.1 (#25) - ([946006c](https://github.com/rtuszik/woodpecker-mcp/commit/946006cdf4cb9a81fccf03f2d164724a4510f0a1)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update ghcr.io/astral-sh/uv docker tag to v0.13.0 (#26) - ([272f1ad](https://github.com/rtuszik/woodpecker-mcp/commit/272f1add19405dbadf030e38c8dea4ceba66b5b4)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update astral-sh/setup-uv action to v10.2.0 (#30) - ([8b38a8e](https://github.com/rtuszik/woodpecker-mcp/commit/8b38a8e32772ae146cc3da91be1c9452f07f2304)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update docker/build-push-action action to v7.4.0 (#31) - ([c5ce7ed](https://github.com/rtuszik/woodpecker-mcp/commit/c5ce7ed9e8f86a8fc61c1899f8884399fe0cc113)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update pre-commit hook betterleaks/betterleaks to v1.9.0 (#37) - ([6268bbc](https://github.com/rtuszik/woodpecker-mcp/commit/6268bbcfd5b580bcfb3872ad87651885611e617b)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update actions/upload-artifact action to v7.0.2 (#40) - ([89cea4d](https://github.com/rtuszik/woodpecker-mcp/commit/89cea4d9ac4ce0a3fabe6778d995bc4d4583834b)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update actions/download-artifact action to v8.0.2 (#39) - ([57a38d5](https://github.com/rtuszik/woodpecker-mcp/commit/57a38d5f8e77b8f571a6bbd209462e8f07e2a885)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update dependency python to v3.13.16 (#38) - ([1f4ac2d](https://github.com/rtuszik/woodpecker-mcp/commit/1f4ac2dcbda9661b656f2eb141751db35cdc88a7)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update dependency python to v3.13.15 (#32) - ([657838b](https://github.com/rtuszik/woodpecker-mcp/commit/657838b37abe04605b563039abae00e858688c88)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update zizmorcore/zizmor-action action to v0.6.4 (#29) - ([889c984](https://github.com/rtuszik/woodpecker-mcp/commit/889c984a66b169895dc778eeb77cb4c8ff485c8b)) - koalabot-rt[bot], koalabot-rt[bot]
+
+- - -
+
 ## [v0.4.0](https://github.com/rtuszik/woodpecker-mcp/compare/6387eb9aa84c1fd536a9d6f6bbde414438d4c74e..v0.4.0) - 2026-09-03
 #### Features
 - add automated release pipeline and changelog - ([75268d6](https://github.com/rtuszik/woodpecker-mcp/commit/75268d6e3f49e03b59120462a5b15392f668e441)) - Robin Tuszik
