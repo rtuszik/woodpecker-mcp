@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.5.3](https://github.com/rtuszik/woodpecker-mcp/compare/e65c89b51f8c698dd3b2ff93e40d0c425e824ee2..v0.5.3) - 2026-10-28
+#### Bug Fixes
+- (**security**) update authlib from 1.7.2 to 1.9.1 - ([304eaad](https://github.com/rtuszik/woodpecker-mcp/commit/304eaad7872455c0c48a20ee04e02c6c7140d46d)) - aikido-autofix[bot]
+#### Miscellaneous Chores
+- (**deps**) update jdx/mise-action action to v5.2.3 (#66) - ([fd5b533](https://github.com/rtuszik/woodpecker-mcp/commit/fd5b533c7c4dc97425726ea5a571b84a70199238)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update astral-sh/setup-uv action to v10.3.2 (#62) - ([df22a2c](https://github.com/rtuszik/woodpecker-mcp/commit/df22a2cea45f440dc95eba410bbfd294f16bbe51)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update astral-sh/setup-uv action to v10.3.1 (#61) - ([320b483](https://github.com/rtuszik/woodpecker-mcp/commit/320b483c039b0ec86ba8d905ca0f70188f402051)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update jdx/mise-action action to v5.2.2 (#60) - ([f651e9b](https://github.com/rtuszik/woodpecker-mcp/commit/f651e9b994309bffd7fcaa69ad9d1d54852c5af7)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update dependency fastmcp to v4.1.2 [security] (#59) - ([94a5f79](https://github.com/rtuszik/woodpecker-mcp/commit/94a5f79e84a152726f6d943b7f8944fddb810b78)) - koalabot-rt[bot], koalabot-rt[bot]
+- (**deps**) update dependency uv to latest - ([4180843](https://github.com/rtuszik/woodpecker-mcp/commit/4180843866d0087a0999c4f8545e6e00219e91a6)) - koalabot-rt[bot]
+- (**deps**) update node.js to lts - ([c9a8cfb](https://github.com/rtuszik/woodpecker-mcp/commit/c9a8cfb4cc36b47cf9d2ebd43c93566f9dd3ca71)) - koalabot-rt[bot]
+- (**deps**) update jdx/mise-action action to v5.2.1 (#56) - ([e65c89b](https://github.com/rtuszik/woodpecker-mcp/commit/e65c89b51f8c698dd3b2ff93e40d0c425e824ee2)) - koalabot-rt[bot], koalabot-rt[bot]
+
+- - -
+
 ## [v0.5.2](https://github.com/rtuszik/woodpecker-mcp/compare/f9823a30b390073cea4204e9d528e38753de944d..v0.5.2) - 2026-10-21
 #### Bug Fixes
 - enforce response and log size limits - ([6d059d6](https://github.com/rtuszik/woodpecker-mcp/commit/6d059d6c681ea317de6d00767333d575889058d0)) - Robin Tuszik
