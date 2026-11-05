@@ -144,6 +144,27 @@ async def test_log_tool_forwards_the_caller_token(mode):
     assert bearer(captured) == ["Bearer alice-token"]
 
 
+async def test_trigger_pipeline_forwards_workflow_and_message():
+    captured: list[httpx2.Request] = []
+    options = {
+        "branch": "main",
+        "workflow": "api-latency",
+        "message": "latency check",
+        "variables": {"RUNS": "3"},
+    }
+
+    async with (
+        serve(captured, token="env-token") as url,
+        Client(url) as client,
+    ):
+        await client.call_tool("trigger_pipeline", {"repo_id": 3, **options})
+
+    assert [(r.method, r.url.path) for r in captured] == [
+        ("POST", "/api/repos/3/pipelines")
+    ]
+    assert json.loads(captured[0].content) == options
+
+
 def rpc(method: str, params: dict, request_id: int) -> dict:
     return {"jsonrpc": "2.0", "id": request_id, "method": method, "params": params}
 
