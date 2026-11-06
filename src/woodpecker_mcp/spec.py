@@ -45,6 +45,7 @@ TOOLS: dict[tuple[str, str], Tool] = {
     ("GET", "/repos/{repo_id}/pipelines/{pipeline_number}/metadata"): Tool(
         "get_pipeline_metadata"
     ),
+    ("GET", "/repos/{repo_id}/workflows"): Tool("list_workflows"),
     ("POST", "/repos/{repo_id}/pipelines"): Tool("trigger_pipeline", write=True),
     ("POST", "/repos/{repo_id}/pipelines/{pipeline_number}"): Tool(
         "restart_pipeline", write=True

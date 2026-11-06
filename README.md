@@ -19,7 +19,7 @@ administration.
 | Area                                 | Tools                                                                                                  |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------ |
 | Repos                                | `list_repos`, `lookup_repo`, `get_repo`, `get_repo_permissions`, `list_branches`, `list_pull_requests` |
-| Pipelines                            | `list_pipelines`, `get_pipeline`, `get_pipeline_config`, `get_pipeline_metadata`                       |
+| Pipelines                            | `list_pipelines`, `get_pipeline`, `get_pipeline_config`, `get_pipeline_metadata`, `list_workflows`     |
 | Pipeline ops (write)                 | `trigger_pipeline`, `restart_pipeline`, `cancel_pipeline`, `approve_pipeline`, `decline_pipeline`      |
 | Logs                                 | `get_step_logs`                                                                                        |
 | Orgs                                 | `lookup_org`, `get_org`, `get_org_permissions`                                                         |
