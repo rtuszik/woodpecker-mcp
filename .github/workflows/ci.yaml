@@ -17,7 +17,7 @@ jobs:
                 fetch-depth: 0
                 persist-credentials: false
                 ref: ${{ github.event.pull_request.head.sha || github.sha }}
-            - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+            - uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
             # Ignore history from before Conventional Commits were enforced.
             - run: cog check 1a4e1a6..HEAD
 
@@ -46,7 +46,7 @@ jobs:
               with:
                 enable-cache: true
             # bun and node for the MCP Inspector tests
-            - uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+            - uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
               with:
                 install_args: bun node
             - run: uv sync --locked
