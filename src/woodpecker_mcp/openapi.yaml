@@ -12,6 +12,11 @@ components:
           additionalProperties:
             type: string
           type: object
+        filters:
+          additionalProperties:
+            type: string
+          description: Server side enforced agent filters
+          type: object
         id:
           type: integer
         last_contact:
@@ -125,6 +130,8 @@ components:
           $ref: '#/components/schemas/WebhookEvent'
         finished:
           type: integer
+        full_name:
+          type: string
         id:
           type: integer
         message:
@@ -165,6 +172,13 @@ components:
         oauth_host:
           description: public url for oauth if different from url
           type: string
+        orgs:
+          description: >-
+            members of those orgs may log in using this forge, in addition to
+            the globally allowed ones
+          items:
+            type: string
+          type: array
         skip_verify:
           type: boolean
         type:
@@ -186,6 +200,13 @@ components:
         oauth_host:
           description: public url for oauth if different from url
           type: string
+        orgs:
+          description: >-
+            members of those orgs may log in using this forge, in addition to
+            the globally allowed ones
+          items:
+            type: string
+          type: array
         skip_verify:
           type: boolean
         type:
@@ -234,6 +255,16 @@ components:
           type: boolean
         name:
           type: string
+        require_org_agents:
+          description: >-
+            RequireOrgAgents restricts workflows of the organization's repos to
+            agents of this organization
+          type: boolean
+      type: object
+    OrgPatch:
+      properties:
+        require_org_agents:
+          type: boolean
       type: object
     OrgPerm:
       properties:
@@ -341,6 +372,9 @@ components:
           type: integer
         reviewed_by:
           type: string
+        selected_workflow:
+          description: only run this workflow and its hard dependencies
+          type: string
         sender:
           description: uses reported user for webhooks and name of cron for cron pipelines
           type: string
@@ -373,16 +407,13 @@ components:
         branch:
           type: string
         message:
-          description: added to the pipeline's message as additional information
           type: string
         variables:
           additionalProperties:
             type: string
           type: object
         workflow:
-          description: >-
-            only run this workflow and its hard dependencies; omit to run all
-            workflows matching the manual event (see list_workflows for names)
+          description: only run this workflow and its hard dependencies
           type: string
       type: object
     PullRequest:
@@ -763,6 +794,10 @@ components:
         - StatusCreated
     Step:
       properties:
+        depends_on:
+          items:
+            type: string
+          type: array
         error:
           type: string
         exit_code:
@@ -861,6 +896,13 @@ components:
           type: boolean
         admin_env:
           type: boolean
+        admin_revoked:
+          description: >-
+            AdminRevoked is set when the user is listed in WOODPECKER_ADMIN, but
+            admin
+
+            was revoked and is not granted again before the next server restart.
+          type: boolean
         avatar_url:
           description: the avatar url for this user.
           type: string
@@ -890,15 +932,6 @@ components:
           description: OrgID is the of the user as model.Org.
           type: integer
       type: object
-    WorkflowInfo:
-      properties:
-        depends_on:
-          items:
-            type: string
-          type: array
-        name:
-          type: string
-      type: object
     WebhookEvent:
       enum:
         - push
@@ -921,6 +954,15 @@ components:
         - EventDeploy
         - EventCron
         - EventManual
+    WorkflowInfo:
+      properties:
+        depends_on:
+          items:
+            type: string
+          type: array
+        name:
+          type: string
+      type: object
     errors.PipelineError:
       properties:
         data: {}
@@ -1270,6 +1312,10 @@ components:
           items:
             $ref: '#/components/schemas/Step'
           type: array
+        depends_on:
+          items:
+            type: string
+          type: array
         environ:
           additionalProperties:
             type: string
@@ -1358,7 +1404,7 @@ paths:
           '*/*':
             schema:
               $ref: '#/components/schemas/Agent'
-        description: the agent's data (only 'name' and 'no_schedule' are read)
+        description: the agent's data (only 'name', 'no_schedule' and 'filters' are read)
         required: true
         x-originalParamName: agent
       responses:
@@ -2074,6 +2120,39 @@ paths:
       summary: Get an organization
       tags:
         - Organization
+    patch:
+      parameters:
+        - description: Insert your personal access token
+          in: header
+          name: Authorization
+          required: true
+          schema:
+            default: Bearer <personal access token>
+            type: string
+        - description: the organization's id
+          in: path
+          name: org_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/OrgPatch'
+        description: the org's updated data
+        required: true
+        x-originalParamName: org
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Org'
+          description: OK
+      summary: Update an organization
+      tags:
+        - Organization
   /orgs/{org_id}/agents:
     get:
       parameters:
@@ -2137,7 +2216,7 @@ paths:
           '*/*':
             schema:
               $ref: '#/components/schemas/Agent'
-        description: the agent's data (only 'name' and 'no_schedule' are read)
+        description: the agent's data (only 'name', 'no_schedule' and 'filters' are read)
         required: true
         x-originalParamName: agent
       responses:
@@ -3380,6 +3459,44 @@ paths:
                 type: array
           description: OK
       summary: Get logs for a pipeline step
+      tags:
+        - Pipeline logs
+  /repos/{repo_id}/logs/{pipeline_number}/{step_id}/download:
+    get:
+      parameters:
+        - description: Insert your personal access token
+          in: header
+          name: Authorization
+          required: true
+          schema:
+            default: Bearer <personal access token>
+            type: string
+        - description: the repository id
+          in: path
+          name: repo_id
+          required: true
+          schema:
+            type: integer
+        - description: the number of the pipeline
+          in: path
+          name: pipeline_number
+          required: true
+          schema:
+            type: integer
+        - description: the step id
+          in: path
+          name: step_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                type: string
+          description: OK
+      summary: Download logs for a pipeline step
       tags:
         - Pipeline logs
   /repos/{repo_id}/move:
