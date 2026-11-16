@@ -5,6 +5,7 @@ node = "lts"
 prek = { version = "latest", postinstall = "prek install" }
 uv = "latest"
 python = "3.13"
+
 [deps]
 uv = { auto = true }
 
