@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [0.6.0](https://github.com/rtuszik/woodpecker-mcp/compare/v0.5.3...v0.6.0) (2026-11-16)
+
+
+### Features
+
+* **pipelines:** allow selecting a workflow when triggering a pipeline ([9cc5279](https://github.com/rtuszik/woodpecker-mcp/commit/9cc527974923aecf4222ad6cb4386a0a8fd079c5))
+
 ## [v0.5.3](https://github.com/rtuszik/woodpecker-mcp/compare/e65c89b51f8c698dd3b2ff93e40d0c425e824ee2..v0.5.3) - 2026-10-28
 #### Bug Fixes
 - (**security**) update authlib from 1.7.2 to 1.9.1 - ([304eaad](https://github.com/rtuszik/woodpecker-mcp/commit/304eaad7872455c0c48a20ee04e02c6c7140d46d)) - aikido-autofix[bot]
